@@ -100,30 +100,28 @@ public class OpenEventsUI extends javax.swing.JDialog {
             }
             manageMembersBtn.remove(manageMembersBtn);
 
-            //display this event's comment start.
-            try {
-
-                commentList = GoService.getInstance().getCommentsByEventId(event.eventId);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            CommentTableModel commentTableModel = new CommentTableModel(commentList);
-            commentTable.setModel(commentTableModel);
-            commentTable.setRowHeight(20);
-            //display this event's comment end..
-            
-            //display this event's participant numbers .
-            try {
-
-                ArrayList<ParticipantVO> participantList = GoService.getInstance().getParticipantsByEventId(event.eventId);
-                numberOfMembersTxt.setText(""+participantList.size());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
         }
+        //display this event's comment start.
+        try {
 
+            commentList = GoService.getInstance().getCommentsByEventId(event.eventId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CommentTableModel commentTableModel = new CommentTableModel(commentList);
+        commentTable.setModel(commentTableModel);
+        commentTable.setRowHeight(20);
+        //display this event's comment end..
+
+        //display this event's participant numbers .
+        try {
+
+            ArrayList<ParticipantVO> participantList = GoService.getInstance().getParticipantsByEventId(event.eventId);
+            numberOfMembersTxt.setText("" + participantList.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -461,7 +459,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
     private void reviewDeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reviewDeleteBtnActionPerformed
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
             writeReviewUI wrFrm = new writeReviewUI(null, true);
-            wrFrm.eventId=event.eventId;
+            wrFrm.eventId = event.eventId;
             wrFrm.setVisible(true);
 
             //refresh the comment table start.
