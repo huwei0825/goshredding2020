@@ -27,12 +27,12 @@ public class advertisementManagementUI extends javax.swing.JDialog{
 
     public void setUseType(int _useType) {
         this.currentUseType = _useType;
-        if (this.currentUseType == 1) {
-            chooseBtn.setEnabled(false);
+        if (this.currentUseType ==USE_TYPE_MANAGE) {
+            chooseBtn.setVisible(false);
         }else{
-            addBtn.setEnabled(false);
-            deleteBtn.setEnabled(false);
-            editBtn.setEnabled(false);
+            addBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+            editBtn.setVisible(false);
         }
     }
 

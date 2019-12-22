@@ -35,8 +35,9 @@ public class MyEventsUI extends javax.swing.JDialog {
     public MyEventsUI(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        editBtn.setVisible(false);
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
-            editBtn.setVisible(false);
+            
             deleteAndLeaveBtn.setText("Leave");
         }
 
