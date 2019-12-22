@@ -9,12 +9,13 @@ package com.tony.goshredding.ui;
  *
  * @author huwei
  */
-public class FeedbackUI extends javax.swing.JFrame {
+public class FeedbackUI extends javax.swing.JDialog {
 
     /**
      * Creates new form Login
      */
-    public FeedbackUI() {
+    public FeedbackUI(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
@@ -35,7 +36,7 @@ public class FeedbackUI extends javax.swing.JFrame {
         deleteBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -297,7 +298,7 @@ public class FeedbackUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FeedbackUI().setVisible(true);
+//                new FeedbackUI().setVisible(true);
             }
         });
     }

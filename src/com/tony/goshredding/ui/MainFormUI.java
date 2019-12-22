@@ -36,9 +36,11 @@ public class MainFormUI extends javax.swing.JFrame {
 
     public MainFormUI() {
         initComponents();
-        if (GoService.currentUserType == 1) {
+        if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
             notificationNewGroupBtn.setText("New Event");
             titleLbl.setText("Events By Other Organizers");
+        }else{
+            advertiseBtn.setVisible(false);
         }
         myProfileLbl.addMouseListener(new com.tony.goshredding.ui.MainFormUI.MyMouseAdapter(myProfileLbl));
         //eventTable
@@ -48,13 +50,13 @@ public class MainFormUI extends javax.swing.JFrame {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setPreferredSize(new Dimension(0, 0));
         eventTable.getTableHeader().setDefaultRenderer(renderer);
-        if (GoService.currentUserType == 2) {
+        if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
             try {
-                recommandEventList = GoService.getInstance().getEventsByParticipantId(GoService.currentUserId);
+                recommandEventList = GoService.getInstance().getUnjoinedEventsByParticipantId(GoService.currentUserId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (GoService.currentUserType == 1) {
+        } else if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
             try {
                 recommandEventList = GoService.getInstance().getOtherEventByOrganizerId(GoService.currentUserId);
             } catch (Exception e) {
@@ -81,10 +83,7 @@ public class MainFormUI extends javax.swing.JFrame {
                     int row = eventTable.getSelectedRow();
                     EventVO event = (EventVO) eventTable.getValueAt(row, 0);
                     if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
-                        OpenEventsUI oeFrm = new OpenEventsUI();
-                        //oeFrm.event = event;
-                        oeFrm.sourceForm = 1;
-                        oeFrm.setEvent(event);
+                        OpenEventsUI oeFrm = new OpenEventsUI(null,true,event);
                         oeFrm.setVisible(true);
                         dispose();
                     }
@@ -339,30 +338,26 @@ public class MainFormUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void advertiseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_advertiseBtnActionPerformed
-        advertisementManagementUI myFrm = new advertisementManagementUI();
-        myFrm.setSourceForm(1);
+        advertisementManagementUI myFrm = new advertisementManagementUI(this,true);
+        myFrm.setUseType(advertisementManagementUI.USE_TYPE_MANAGE);
         myFrm.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_advertiseBtnActionPerformed
 
     private void notificationNewGroupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notificationNewGroupBtnActionPerformed
-        if (GoService.currentUserType == 1) {
-            EventInformationUI eiFrm = new EventInformationUI();
-            eiFrm.sourceForm = 1;
+        if (GoService.currentUserType ==GoService.USER_TYPE_ORGANIZER) {
+            EventInformationUI eiFrm = new EventInformationUI(null,true);
             eiFrm.setVisible(true);
-            this.dispose();
         } else {
-            NotificationCentreUI ncFrm = new NotificationCentreUI();
+            NotificationCentreUI ncFrm = new NotificationCentreUI(this,true);
             ncFrm.setVisible(true);
-            this.dispose();
+
         }
     }//GEN-LAST:event_notificationNewGroupBtnActionPerformed
 
     private void myEventBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myEventBtnActionPerformed
         // TODO add your handling code here:
-        MyEventsUI myFrm = new MyEventsUI();
+        MyEventsUI myFrm = new MyEventsUI(null,true);
         myFrm.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_myEventBtnActionPerformed
 
     private void searchTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTxtActionPerformed
@@ -371,9 +366,8 @@ public class MainFormUI extends javax.swing.JFrame {
 
     private void myProfileLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myProfileLblMouseClicked
         // TODO add your handling code here:
-        myProfileUI mpFrm = new myProfileUI();
+        myProfileUI mpFrm = new myProfileUI(null,true);
         mpFrm.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_myProfileLblMouseClicked
 
     private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged

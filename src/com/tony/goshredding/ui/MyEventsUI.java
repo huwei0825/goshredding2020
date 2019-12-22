@@ -24,7 +24,7 @@ import javax.swing.table.TableColumnModel;
  *
  * @author huwei
  */
-public class MyEventsUI extends javax.swing.JFrame {
+public class MyEventsUI extends javax.swing.JDialog {
 
     /**
      * Creates new form Login
@@ -32,10 +32,11 @@ public class MyEventsUI extends javax.swing.JFrame {
     ArrayList<EventVO> eventList = new ArrayList<EventVO>();
     ArrayList<EventVO> eventListOriginal = new ArrayList<EventVO>();
 
-    public MyEventsUI() {
+    public MyEventsUI(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        if (GoService.currentUserType == 2) {
-            editBtn.remove(editBtn);
+        if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
+            editBtn.setVisible(false);
             deleteBtn.setText("Leave");
         }
 
@@ -55,11 +56,11 @@ public class MyEventsUI extends javax.swing.JFrame {
         //display events on "my events" table
         try {
 
-            if (GoService.currentUserType == 1) {
+            if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
                 eventListOriginal = GoService.getInstance().getEventByOrganizerId(GoService.currentUserId);
             }
-            if (GoService.currentUserType == 2) {
-                //eventListOriginal = GoService.getInstance().getEventByOrganizerId(GoService.currentUserId);
+            if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
+                eventListOriginal = GoService.getInstance().getEventsByParticipantId(GoService.currentUserId);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +115,7 @@ public class MyEventsUI extends javax.swing.JFrame {
         backBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -282,13 +283,14 @@ public class MyEventsUI extends javax.swing.JFrame {
     }
     private void openBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openBtnActionPerformed
         int row = myEventsTable.getSelectedRow();
-        EventVO event = (EventVO) eventList.get(row);
-        if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
-            OpenEventsUI oeFrm = new OpenEventsUI();
-            oeFrm.sourceForm = 2;
-            oeFrm.setEvent(event);
-            oeFrm.setVisible(true);
-            this.dispose();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Please select an event first");
+        } else {
+            EventVO event = (EventVO) eventList.get(row);
+            if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
+                OpenEventsUI oeFrm = new OpenEventsUI(null, true,event);
+                oeFrm.setVisible(true);
+            }
         }
     }//GEN-LAST:event_openBtnActionPerformed
 
@@ -296,11 +298,9 @@ public class MyEventsUI extends javax.swing.JFrame {
         int row = myEventsTable.getSelectedRow();
         EventVO event = (EventVO) eventList.get(row);
         if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
-            com.tony.goshredding.ui.EventInformationUI eiFrm = new com.tony.goshredding.ui.EventInformationUI();
+            com.tony.goshredding.ui.EventInformationUI eiFrm = new com.tony.goshredding.ui.EventInformationUI(null, true);
             eiFrm.setEvent(event);
-            eiFrm.sourceForm = 2;
             eiFrm.setVisible(true);
-            this.dispose();
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
@@ -308,27 +308,29 @@ public class MyEventsUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             int row = myEventsTable.getSelectedRow();
-            EventVO event = (EventVO) eventList.get(row);
-            int delete = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?");
+            if (row < 0) {
+                JOptionPane.showMessageDialog(null, "Please select an event first");
+            } else {
+                EventVO event = (EventVO) eventList.get(row);
+                int delete = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?");
 
-            if (delete == JOptionPane.YES_OPTION) {
-                try {
-                    GoService.getInstance().deleteEvent(event);
-                } catch (Exception e) {
+                if (delete == JOptionPane.YES_OPTION) {
+                    try {
+                        GoService.getInstance().deleteEvent(event);
+                    } catch (Exception e) {
 
+                    }
                 }
+                com.tony.goshredding.ui.MyEventsUI me = new com.tony.goshredding.ui.MyEventsUI(null, true);
+                me.setVisible(true);
             }
-            com.tony.goshredding.ui.MyEventsUI me = new com.tony.goshredding.ui.MyEventsUI();
-            me.setVisible(true);
-            this.dispose();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Please select an event first");
+
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        MainFormUI mainFrm = new MainFormUI();
-        mainFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
@@ -395,7 +397,7 @@ public class MyEventsUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MyEventsUI().setVisible(true);
+//                new MyEventsUI().setVisible(true);
             }
         });
     }

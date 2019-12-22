@@ -11,20 +11,23 @@ import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author huwei
  */
-public class OpenEventsUI extends javax.swing.JFrame {
+public class OpenEventsUI extends javax.swing.JDialog {
 
     /**
      * Creates new form Login
      */
     EventVO event = null;
-    public int sourceForm = 0;
 
-    public void setEvent(EventVO eventvo) {
+    public OpenEventsUI(java.awt.Frame parent, boolean modal, EventVO eventvo) {
+        super(parent, modal);
+        initComponents();
+
         event = eventvo;
         String time = null;
         String timeSlot = null;
@@ -38,20 +41,20 @@ public class OpenEventsUI extends javax.swing.JFrame {
         String[] timeArray = event.eventTime.split(":");
         int hours = Integer.parseInt(timeArray[0]);
         String minutes = timeArray[1];
-        if(hours >= 0 && hours <= 11){
+        if (hours >= 0 && hours <= 11) {
             time = event.eventTime;
             timeSlot = "AM";
-        }else if(hours>=12 && hours <=23){
+        } else if (hours >= 12 && hours <= 23) {
             time = String.valueOf(hours - 12) + ":" + minutes;
             timeSlot = "PM";
         }
         timeTxt.setText(time);
-        timeSlotTxt.setText("    "+ timeSlot);
+        timeSlotTxt.setText("    " + timeSlot);
         if (event.eventPicName != null && event.eventPicName.length() > 0) {
 
             try {
                 File directory = new File("");
-                String filePath = directory.getCanonicalPath()+"/images/"+event.eventPicName;
+                String filePath = directory.getCanonicalPath() + "/images/" + event.eventPicName;
                 File targetFile = new File(filePath);
                 Image image = new ImageIcon(targetFile.getAbsolutePath()).getImage();
                 image = image.getScaledInstance(310, 180, Image.SCALE_SMOOTH);
@@ -60,10 +63,7 @@ public class OpenEventsUI extends javax.swing.JFrame {
                 e.printStackTrace();
             }
         }
-    }
 
-    public OpenEventsUI() {
-        initComponents();
         adTxt.setEditable(false);
         dateTxt.setEditable(false);
         locationTxt.setEditable(false);
@@ -72,27 +72,28 @@ public class OpenEventsUI extends javax.swing.JFrame {
         timeTxt.setEditable(false);
         timeSlotTxt.setEditable(false);
         numberOfMembersTxt.setEditable(false);
-        if (GoService.currentUserType == 1) {
+        if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
             joinEditBtn.setText("Edit");
             reviewDeleteBtn.setText("delete");
         }
-        if (GoService.currentUserType == 2) {
+        if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
+            manageMembersBtn.setVisible(false);
             ArrayList<EventVO> eventList = new ArrayList<EventVO>();
-            try{
-            eventList = GoService.getInstance().getEventsByParticipantId(GoService.currentUserId);
-            }catch(Exception e){
+            try {
+                eventList = GoService.getInstance().getEventsByParticipantId(GoService.currentUserId);
+            } catch (Exception e) {
             }
             boolean found = false;
-            for(int i = 0; i<eventList.size(); i++){
+            for (int i = 0; i < eventList.size(); i++) {
                 EventVO event2 = new EventVO();
-                event2= eventList.get(i);
-                if(event2.eventId == event.eventId){
+                event2 = eventList.get(i);
+                if (event2.eventId.equalsIgnoreCase(event.eventId)) {
                     found = true;
                 }
             }
-            if(found == true){
-                joinEditBtn.setEnabled(false);
-                joinEditBtn.setText("joined");
+            if (found) {
+                joinEditBtn.setVisible(false);
+//                joinEditBtn.setText("joined");
             }
             manageMembersBtn.remove(manageMembersBtn);
         }
@@ -138,7 +139,7 @@ public class OpenEventsUI extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         introductionTxt = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -282,65 +283,68 @@ public class OpenEventsUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(imageLbl)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(42, 42, 42)
-                                        .addComponent(dateTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(13, 13, 13)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(70, 70, 70)
-                                        .addComponent(locationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(45, 45, 45)
-                                        .addComponent(timeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(1, 1, 1)
-                                .addComponent(timeSlotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(83, 83, 83)
-                                .addComponent(typeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(3, 3, 3)
-                                .addComponent(reviewDeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(eventNameLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(29, 29, 29)
+                        .addComponent(numberOfMembersTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(221, 221, 221)
+                        .addComponent(manageMembersBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(joinEditBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(500, 500, 500)
-                        .addComponent(jLabel5))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(imageLbl)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(42, 42, 42)
+                                                .addComponent(dateTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(13, 13, 13)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(70, 70, 70)
+                                                .addComponent(locationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(7, 7, 7)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(45, 45, 45)
+                                                .addComponent(timeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(1, 1, 1)
+                                        .addComponent(timeSlotTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(83, 83, 83)
+                                        .addComponent(typeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(7, 7, 7)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(3, 3, 3)
+                                        .addComponent(reviewDeleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(eventNameLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(500, 500, 500)
+                                .addComponent(jLabel5))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(330, 330, 330)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(330, 330, 330)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(numberOfMembersTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(221, 221, 221)
-                .addComponent(manageMembersBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(joinEditBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(23, 23, 23)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -396,10 +400,10 @@ public class OpenEventsUI extends javax.swing.JFrame {
                     .addComponent(numberOfMembersTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(manageMembersBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(joinEditBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(joinEditBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -421,43 +425,36 @@ public class OpenEventsUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void manageMembersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageMembersBtnActionPerformed
-        membersManagementUI mmFrm = new membersManagementUI();
+        membersManagementUI mmFrm = new membersManagementUI(null, true);
         mmFrm.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_manageMembersBtnActionPerformed
 
     private void reviewDeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reviewDeleteBtnActionPerformed
-        if (GoService.currentUserType == 2) {
-        writeReviewUI wrFrm = new writeReviewUI();
-        wrFrm.setVisible(true);
-        this.dispose();
+        if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
+            writeReviewUI wrFrm = new writeReviewUI(null, true);
+            wrFrm.setVisible(true);
         }
     }//GEN-LAST:event_reviewDeleteBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        if (sourceForm == 1) {
-            MainFormUI mfFrm = new MainFormUI();
-            mfFrm.setVisible(true);
-            this.dispose();
-        }
-        if (sourceForm == 2) {
-            MyEventsUI myFrm = new MyEventsUI();
-            myFrm.setVisible(true);
-            this.dispose();
-        }
 
+        this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void joinEditBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinEditBtnActionPerformed
-    if (GoService.currentUserType == 1) {
+        if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
 //            EventInformationUI ei = new EventInformationUI();
 //            ei.setVisible(true);
 //            this.dispose();
         }
-        if (GoService.currentUserType == 2) {
-            try{
-            GoService.getInstance().joinEvent(GoService.currentUserId, event.eventId);
-            }catch(Exception e){
+        if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
+            try {
+                GoService.getInstance().joinEvent(GoService.currentUserId, event.eventId);
+                JOptionPane.showMessageDialog(null, "Joined!");
+                this.dispose();
+                MainFormUI mf = new MainFormUI();
+                mf.setVisible(true);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -524,7 +521,7 @@ public class OpenEventsUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new OpenEventsUI().setVisible(true);
+//                new OpenEventsUI().setVisible(true);
             }
         });
     }

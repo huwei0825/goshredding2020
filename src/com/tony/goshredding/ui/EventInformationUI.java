@@ -26,13 +26,12 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author huwei
  */
-public class EventInformationUI extends javax.swing.JFrame {
+public class EventInformationUI extends javax.swing.JDialog {
 
     /**
      * Creates new form Login
      */
     private PictureViewPanel pictureViewPanel = null;
-    public int sourceForm = 0;
     private String strImageName = "";
     EventVO event = null;
 
@@ -74,7 +73,8 @@ public class EventInformationUI extends javax.swing.JFrame {
         }
     }
 
-    public EventInformationUI() {
+    public EventInformationUI(java.awt.Frame parent, boolean modal) {
+         super(parent, modal);
         initComponents();
 
         try {
@@ -133,7 +133,7 @@ public class EventInformationUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         imageLbl = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -388,16 +388,7 @@ public class EventInformationUI extends javax.swing.JFrame {
     }//GEN-LAST:event_locationTxtActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        if (this.sourceForm == 1) {
-            MainFormUI mainFrm = new MainFormUI();
-            mainFrm.setVisible(true);
-        } else if (this.sourceForm == 2) {
-            MyEventsUI myFrm = new MyEventsUI();
-            myFrm.setVisible(true);
-        } else if (this.sourceForm == 3) {
-            OpenEventsUI oe = new OpenEventsUI();
-            oe.setVisible(true);
-        }
+   
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
@@ -441,27 +432,16 @@ public class EventInformationUI extends javax.swing.JFrame {
 
             GoService.getInstance().addEvent(event);
             JOptionPane.showMessageDialog(null, "successfully saved");
-            if (this.sourceForm == 1) {
-                MainFormUI mainFrm = new MainFormUI();
-                mainFrm.setVisible(true);
-            } else if (this.sourceForm == 2) {
-                MyEventsUI myFrm = new MyEventsUI();
-                myFrm.setVisible(true);
-            } else if (this.sourceForm == 3) {
-                OpenEventsUI oe = new OpenEventsUI();
-                oe.setVisible(true);
-            }
-            this.dispose();
+     
         } catch (Exception e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_saveBtnActionPerformed
 
     private void changeAdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeAdBtnActionPerformed
-        advertisementManagementUI amFrm = new advertisementManagementUI();
-        amFrm.setSourceForm(2);
+        advertisementManagementUI amFrm = new advertisementManagementUI(null,true);
+        amFrm.setUseType(advertisementManagementUI.USE_TYPE_CHOOSE);
         amFrm.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_changeAdBtnActionPerformed
 
     private void uploadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadBtnActionPerformed
@@ -568,7 +548,7 @@ public class EventInformationUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EventInformationUI().setVisible(true);
+//                new EventInformationUI().setVisible(true);
             }
         });
     }

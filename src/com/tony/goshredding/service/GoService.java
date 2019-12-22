@@ -113,10 +113,11 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
+
     public ArrayList<EventVO> getEventsByParticipantId(String userId) throws Exception {
         ArrayList<EventVO> rsList = new ArrayList<EventVO>();
         try {
-            resultSet = this.getStatement().executeQuery("select a.* from event_table a,﻿participant_event_table b where a.EventID = b.EventID and b.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
+            resultSet = this.getStatement().executeQuery("select a.* from event_table a,participant_event_table b where a.EventID = b.EventID and b.ParticipantID='" + Integer.parseInt(userId) + "'");
             while (resultSet.next()) {
                 EventVO event = new EventVO();
                 event.eventId = resultSet.getString("EventID");
@@ -137,10 +138,11 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
+
     public ArrayList<EventVO> getUnjoinedEventsByParticipantId(String userId) throws Exception {
         ArrayList<EventVO> rsList = new ArrayList<EventVO>();
         try {
-            resultSet = this.getStatement().executeQuery("select a.* from event_table a");//,﻿participant_event_table b where a.EventID<>b.EventID and b.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
+            resultSet = this.getStatement().executeQuery("select * from event_table where EventID not in (select EventID from participant_event_table where ParticipantID='" + Integer.parseInt(userId) + "')");
             while (resultSet.next()) {
                 EventVO event = new EventVO();
                 event.eventId = resultSet.getString("EventID");
@@ -161,6 +163,7 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
+
     public ArrayList bubbleSortEventByTime(ArrayList<EventVO> eventList) {
 
         DateFormat df = new SimpleDateFormat("dd/MM/yyyyHH:mm");
@@ -417,12 +420,14 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
+
     public void joinEvent(String participantId, String eventId) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("ParticipantID", participantId);
         map.put("EventID", eventId);
         this.executeInsert("participant_event_table", map);
     }
+
     public void updateParticipant(ParticipantVO participantVO) throws Exception {
 
     }

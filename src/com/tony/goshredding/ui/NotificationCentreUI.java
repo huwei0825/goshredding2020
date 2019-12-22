@@ -5,16 +5,18 @@
  */
 package com.tony.goshredding.ui;
 
+
 /**
  *
  * @author huwei
  */
-public class NotificationCentreUI extends javax.swing.JFrame {
+public class NotificationCentreUI extends javax.swing.JDialog  {
 
     /**
      * Creates new form Login
      */
-    public NotificationCentreUI() {
+    public NotificationCentreUI(java.awt.Frame parent, boolean modal) {
+         super(parent, modal);
         initComponents();
     }
 
@@ -35,7 +37,7 @@ public class NotificationCentreUI extends javax.swing.JFrame {
         deleteBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -135,8 +137,7 @@ public class NotificationCentreUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        MainFormUI mainFrm = new MainFormUI();
-        mainFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
@@ -233,7 +234,14 @@ public class NotificationCentreUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NotificationCentreUI().setVisible(true);
+                  NotificationCentreUI dialog = new NotificationCentreUI(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

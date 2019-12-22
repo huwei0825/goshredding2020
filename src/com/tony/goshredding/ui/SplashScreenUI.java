@@ -1,22 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.tony.goshredding.ui;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author huwei
+ * this class is splash screen.
+ * @author Songyun hu
  */
 public class SplashScreenUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form testerformUI
-     */
     public SplashScreenUI() {
         initComponents();
     }
@@ -59,9 +51,9 @@ public class SplashScreenUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
+
         try {
-            // TODO add your handling code here:
+            //the splash screen will display 1500 milliseconds.
             Thread.sleep(1500);
             LoginUI login = new LoginUI();
 

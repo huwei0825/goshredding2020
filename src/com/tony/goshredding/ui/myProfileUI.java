@@ -9,12 +9,13 @@ package com.tony.goshredding.ui;
  *
  * @author huwei
  */
-public class myProfileUI extends javax.swing.JFrame {
+public class myProfileUI extends  javax.swing.JDialog {
 
     /**
      * Creates new form Login
      */
-    public myProfileUI() {
+    public myProfileUI(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         usernameLbl.setText("Goofy tony");
         forenameLbl.setText("Tony");
@@ -75,7 +76,7 @@ public class myProfileUI extends javax.swing.JFrame {
         incomeLbl = new javax.swing.JLabel();
         add2Lbl = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -364,9 +365,9 @@ public class myProfileUI extends javax.swing.JFrame {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        editProfileUI ep = new editProfileUI();
+        editProfileUI ep = new editProfileUI(null,true);
         ep.setVisible(true);
-        this.dispose();
+
     }//GEN-LAST:event_editBtnActionPerformed
 
     /**
@@ -462,7 +463,7 @@ public class myProfileUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new myProfileUI().setVisible(true);
+//                new myProfileUI().setVisible(true);
             }
         });
     }

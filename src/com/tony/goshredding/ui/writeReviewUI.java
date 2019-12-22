@@ -9,12 +9,13 @@ package com.tony.goshredding.ui;
  *
  * @author huwei
  */
-public class writeReviewUI extends javax.swing.JFrame {
+public class writeReviewUI extends javax.swing.JDialog {
 
     /**
      * Creates new form Login
      */
-    public writeReviewUI() {
+    public writeReviewUI(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
@@ -35,7 +36,7 @@ public class writeReviewUI extends javax.swing.JFrame {
         backBtn = new javax.swing.JButton();
         submitBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -123,14 +124,12 @@ public class writeReviewUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        OpenEventsUI oeFrm = new OpenEventsUI();
-        oeFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
-        OpenEventsUI oeFrm = new OpenEventsUI();
-        oeFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_submitBtnActionPerformed
 
@@ -171,7 +170,7 @@ public class writeReviewUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new writeReviewUI().setVisible(true);
+//                new writeReviewUI().setVisible(true);
             }
         });
     }

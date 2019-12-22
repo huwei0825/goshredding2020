@@ -14,13 +14,14 @@ import javax.swing.filechooser.FileFilter;
  *
  * @author Songyun hu
  */
-public class AdvertisementInformationUI extends javax.swing.JFrame {
+public class AdvertisementInformationUI extends javax.swing.JDialog {
 
     private String strImageName = "";//the current select advertisement picture.
-    public static int OPEN_TYPE_NEW=1;//used to create a new advertisement.
-    public static int OPEN_TYPE_EDIT=2;//used to edit a existing advertisement.
-    
-    public AdvertisementInformationUI() {
+    public static int OPEN_TYPE_NEW = 1;//used to create a new advertisement.
+    public static int OPEN_TYPE_EDIT = 2;//used to edit a existing advertisement.
+
+    public AdvertisementInformationUI(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
@@ -200,26 +201,27 @@ public class AdvertisementInformationUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     /**
      * return to advertisement management ui.
-     * @param evt 
+     *
+     * @param evt
      */
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        advertisementManagementUI amFrm = new advertisementManagementUI();
-        amFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
     /**
      * save the new advertisement,then rerturn to advertisement management ui.
-     * @param evt 
+     *
+     * @param evt
      */
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
-        
-        advertisementManagementUI amFrm = new advertisementManagementUI();
-        amFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_saveBtnActionPerformed
     /**
-     * select picture from current os,and copy the picture to current application local images folder.
-     * @param evt 
+     * select picture from current os,and copy the picture to current
+     * application local images folder.
+     *
+     * @param evt
      */
     private void uploadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadBtnActionPerformed
         JFileChooser chooser = new JFileChooser();
@@ -311,7 +313,14 @@ public class AdvertisementInformationUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdvertisementInformationUI().setVisible(true);
+                AdvertisementInformationUI dialog = new AdvertisementInformationUI(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }

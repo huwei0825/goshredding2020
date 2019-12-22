@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.tony.goshredding.ui;
 
 import com.tony.goshredding.service.GoService;
@@ -12,8 +7,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
- *
- * @author huwei
+ * This class is for user to login.
+ * @author Songyun hu.
  */
 public class LoginUI extends javax.swing.JFrame {
 
@@ -55,6 +50,7 @@ public class LoginUI extends javax.swing.JFrame {
         jLabel1.setText("Login");
 
         usernameTxt.setFont(new java.awt.Font("Lucida Grande", 0, 15)); // NOI18N
+        usernameTxt.setText("e");
 
         loginBtn.setBackground(new java.awt.Color(72, 124, 175));
         loginBtn.setText("Log in");
@@ -82,6 +78,7 @@ public class LoginUI extends javax.swing.JFrame {
         jLabel4.setText("Username:");
 
         passwordTxt.setFont(new java.awt.Font("Lucida Grande", 0, 15)); // NOI18N
+        passwordTxt.setText("12345678");
 
         javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
         jPanel.setLayout(jPanelLayout);
@@ -138,19 +135,26 @@ public class LoginUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+            .addComponent(jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 482, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * click the signup button to display SignUpUI.
+     * @param evt 
+     */
     private void signUpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpBtnActionPerformed
         SignUpUI suFrm = new SignUpUI();
         suFrm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_signUpBtnActionPerformed
-
+    /**
+     * click the button,the application will check whether the user is existed,
+     * if checking is ok,then enter the mainformUI.
+     * @param evt 
+     */
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         String username = usernameTxt.getText();
         String password = passwordTxt.getText();
@@ -183,7 +187,7 @@ public class LoginUI extends javax.swing.JFrame {
                     String dbPassword = participantObj.password;
                     String userId = participantObj.participantId;
 
-                    if (password.equals(dbPassword)) {
+                    if (password.equals(dbPassword)) {//check the password.
                         GoService.currentUserId = userId;
                         JOptionPane.showMessageDialog(null, "login sucessful");
                         GoService.currentUserType = GoService.USER_TYPE_PARTICIPANT;

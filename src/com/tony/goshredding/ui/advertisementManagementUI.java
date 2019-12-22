@@ -11,21 +11,23 @@ import com.tony.goshredding.service.GoService;
  *
  * @author huwei
  */
-public class advertisementManagementUI extends javax.swing.JFrame {
+public class advertisementManagementUI extends javax.swing.JDialog{
 
     /**
      * Creates new form Login
      */
-    private int sourceForm = 0;
-
-    public advertisementManagementUI() {
+    private int currentUseType = USE_TYPE_CHOOSE;
+    public static int USE_TYPE_CHOOSE=0;
+    public static int USE_TYPE_MANAGE=1;
+    public advertisementManagementUI(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
 
     }
 
-    public void setSourceForm(int _sourceForm) {
-        this.sourceForm = _sourceForm;
-        if (this.sourceForm == 1) {
+    public void setUseType(int _useType) {
+        this.currentUseType = _useType;
+        if (this.currentUseType == 1) {
             chooseBtn.setEnabled(false);
         }else{
             addBtn.setEnabled(false);
@@ -56,7 +58,7 @@ public class advertisementManagementUI extends javax.swing.JFrame {
         chooseBtn = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -193,34 +195,23 @@ public class advertisementManagementUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        if (sourceForm == 1) {
-            MainFormUI mainFrm = new MainFormUI();
-            mainFrm.setVisible(true);
-        } else {
-            EventInformationUI eiFrm = new EventInformationUI();
-            eiFrm.sourceForm = sourceForm;
-            eiFrm.setVisible(true);
 
-        }
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void chooseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseBtnActionPerformed
-        EventInformationUI eiFrm = new EventInformationUI();
-        eiFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_chooseBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI();
+        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null,true);
         aiFrm.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI();
+        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null,true);
         aiFrm.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_editBtnActionPerformed
 
     /**
@@ -260,7 +251,7 @@ public class advertisementManagementUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new advertisementManagementUI().setVisible(true);
+//                new advertisementManagementUI().setVisible(true);
             }
         });
     }

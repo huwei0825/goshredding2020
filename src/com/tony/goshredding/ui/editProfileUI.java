@@ -16,12 +16,13 @@ import javax.swing.JOptionPane;
  *
  * @author huwei
  */
-public class editProfileUI extends javax.swing.JFrame {
+public class editProfileUI extends javax.swing.JDialog {
 
     /**
      * Creates new form Login
      */
-    public editProfileUI() {
+    public editProfileUI(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
         usernameTxt.setText("Goofy tony");
         forenameTxt.setText("Tony");
@@ -74,7 +75,7 @@ public class editProfileUI extends javax.swing.JFrame {
         password2Txt = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
         setResizable(false);
         setSize(new java.awt.Dimension(850, 480));
@@ -241,7 +242,7 @@ public class editProfileUI extends javax.swing.JFrame {
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(password2Txt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel.add(jPanel1);
@@ -263,8 +264,7 @@ public class editProfileUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        myProfileUI mpFrm = new myProfileUI();
-        mpFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
@@ -662,7 +662,7 @@ public class editProfileUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new editProfileUI().setVisible(true);
+//                new editProfileUI().setVisible(true);
             }
         });
     }
