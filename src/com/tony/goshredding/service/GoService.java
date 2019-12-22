@@ -123,7 +123,54 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
-
+    public ArrayList<EventVO> getEventsByParticipantId(String userId) throws Exception {
+        ArrayList<EventVO> rsList = new ArrayList<EventVO>();
+        try {
+            resultSet = this.getStatement().executeQuery("select a.* from event_table a,﻿participant_event_table b where a.EventID=b.EventID and b.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
+            while (resultSet.next()) {
+                EventVO event = new EventVO();
+                event.eventId = resultSet.getString("EventID");
+                event.eventName = resultSet.getString("EventName");
+                event.eventPicName = resultSet.getString("ImageName");
+                event.eventTime = resultSet.getString("Time");
+                event.eventDate = resultSet.getString("Date");
+                event.eventType = resultSet.getString("EventType");
+                event.eventTypePicName = resultSet.getString("EventTypeImageName");
+                event.introduction = resultSet.getString("EventIntroduction");
+                event.location = resultSet.getString("Location");
+                event.organizerId = resultSet.getString("OrganizerID");
+                event.advertisementId = resultSet.getString("AdvertisementID");
+                rsList.add(event);
+            }
+        } finally {
+            this.destroyed();
+        }
+        return rsList;
+    }
+    public ArrayList<EventVO> getUnjoinedEventsByParticipantId(String userId) throws Exception {
+        ArrayList<EventVO> rsList = new ArrayList<EventVO>();
+        try {
+            resultSet = this.getStatement().executeQuery("select a.* from event_table a,﻿participant_event_table b where a.EventID<>b.EventID and b.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
+            while (resultSet.next()) {
+                EventVO event = new EventVO();
+                event.eventId = resultSet.getString("EventID");
+                event.eventName = resultSet.getString("EventName");
+                event.eventPicName = resultSet.getString("ImageName");
+                event.eventTime = resultSet.getString("Time");
+                event.eventDate = resultSet.getString("Date");
+                event.eventType = resultSet.getString("EventType");
+                event.eventTypePicName = resultSet.getString("EventTypeImageName");
+                event.introduction = resultSet.getString("EventIntroduction");
+                event.location = resultSet.getString("Location");
+                event.organizerId = resultSet.getString("OrganizerID");
+                event.advertisementId = resultSet.getString("AdvertisementID");
+                rsList.add(event);
+            }
+        } finally {
+            this.destroyed();
+        }
+        return rsList;
+    }
     public ArrayList bubbleSortEventByTime(ArrayList<EventVO> eventList) {
 
         DateFormat df = new SimpleDateFormat("dd/MM/yyyyHH:mm");
