@@ -421,6 +421,10 @@ public class GoService extends SqliteHelper {
         return rsList;
     }
 
+    public void leaveEvent(String participantId, String eventId) throws Exception {
+        this.executeUpdate("delete from participant_event_table where ParticipantID='" + participantId + "' and EventID='"+eventId+"'");
+    }
+
     public void joinEvent(String participantId, String eventId) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("ParticipantID", participantId);

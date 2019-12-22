@@ -37,7 +37,7 @@ public class MyEventsUI extends javax.swing.JDialog {
         initComponents();
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
             editBtn.setVisible(false);
-            deleteBtn.setText("Leave");
+            deleteAndLeaveBtn.setText("Leave");
         }
 
         CalendarPanel ser = CalendarPanel.getInstance();
@@ -109,7 +109,7 @@ public class MyEventsUI extends javax.swing.JDialog {
         myEventsTable = new javax.swing.JTable();
         openBtn = new javax.swing.JButton();
         editBtn = new javax.swing.JButton();
-        deleteBtn = new javax.swing.JButton();
+        deleteAndLeaveBtn = new javax.swing.JButton();
         calendarContainerPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
@@ -162,11 +162,11 @@ public class MyEventsUI extends javax.swing.JDialog {
             }
         });
 
-        deleteBtn.setBackground(new java.awt.Color(72, 124, 175));
-        deleteBtn.setText("Delete");
-        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+        deleteAndLeaveBtn.setBackground(new java.awt.Color(72, 124, 175));
+        deleteAndLeaveBtn.setText("Delete");
+        deleteAndLeaveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteBtnActionPerformed(evt);
+                deleteAndLeaveBtnActionPerformed(evt);
             }
         });
 
@@ -198,7 +198,7 @@ public class MyEventsUI extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(deleteAndLeaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelLayout.createSequentialGroup()
                         .addGap(53, 53, 53)
                         .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,7 +239,7 @@ public class MyEventsUI extends javax.swing.JDialog {
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(openBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteAndLeaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
@@ -288,7 +288,7 @@ public class MyEventsUI extends javax.swing.JDialog {
         } else {
             EventVO event = (EventVO) eventList.get(row);
             if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
-                OpenEventsUI oeFrm = new OpenEventsUI(null, true,event);
+                OpenEventsUI oeFrm = new OpenEventsUI(null, true, event);
                 oeFrm.setVisible(true);
             }
         }
@@ -304,30 +304,68 @@ public class MyEventsUI extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
-    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+    private void deleteAndLeaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAndLeaveBtnActionPerformed
         // TODO add your handling code here:
         try {
-            int row = myEventsTable.getSelectedRow();
-            if (row < 0) {
-                JOptionPane.showMessageDialog(null, "Please select an event first");
-            } else {
-                EventVO event = (EventVO) eventList.get(row);
-                int delete = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?");
+            if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {//delete the event.
+                int row = myEventsTable.getSelectedRow();
+                if (row < 0) {
+                    JOptionPane.showMessageDialog(null, "Please select an event first");
+                } else {
+                    EventVO event = (EventVO) eventList.get(row);
+                    int delete = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?");
 
-                if (delete == JOptionPane.YES_OPTION) {
-                    try {
-                        GoService.getInstance().deleteEvent(event);
-                    } catch (Exception e) {
+                    if (delete == JOptionPane.YES_OPTION) {
+                        try {
+                            GoService.getInstance().deleteEvent(event);
+                        } catch (Exception e) {
 
+                        }
                     }
+
                 }
-                com.tony.goshredding.ui.MyEventsUI me = new com.tony.goshredding.ui.MyEventsUI(null, true);
-                me.setVisible(true);
+            } else {//USER_TYPE_PARTICIPANT
+                int row = myEventsTable.getSelectedRow();
+                if (row < 0) {
+                    JOptionPane.showMessageDialog(null, "Please select an event first");
+                } else {
+                    EventVO event = (EventVO) eventList.get(row);
+                    int leaveResult = JOptionPane.showConfirmDialog(null, "Are you sure want to leave?");
+
+                    if (leaveResult == JOptionPane.YES_OPTION) {
+                        try {
+                            GoService.getInstance().leaveEvent(GoService.currentUserId,event.eventId);
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+                }
             }
+            ///refresh the event list.
+            try {
+
+                if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
+                    eventListOriginal = GoService.getInstance().getEventByOrganizerId(GoService.currentUserId);
+                }
+                if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
+                    eventListOriginal = GoService.getInstance().getEventsByParticipantId(GoService.currentUserId);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            eventList = eventListOriginal;
+            EventTableModel eventTableModel = new EventTableModel(eventList);
+            myEventsTable.setModel(eventTableModel);
+            TableColumnModel tcm = myEventsTable.getColumnModel();
+            TableColumn tc = tcm.getColumn(0);
+            tc.setPreferredWidth(200);
+            tc.setCellRenderer(new MyEventCellRender());
+            myEventsTable.repaint();
         } catch (Exception e) {
 
         }
-    }//GEN-LAST:event_deleteBtnActionPerformed
+    }//GEN-LAST:event_deleteAndLeaveBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
 
@@ -405,7 +443,7 @@ public class MyEventsUI extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
     private javax.swing.JPanel calendarContainerPanel;
-    private javax.swing.JButton deleteBtn;
+    private javax.swing.JButton deleteAndLeaveBtn;
     private javax.swing.JButton editBtn;
     private javax.swing.JComboBox<String> eventTypeComboBox;
     private javax.swing.JLabel jLabel1;

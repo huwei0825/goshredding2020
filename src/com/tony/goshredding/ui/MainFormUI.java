@@ -85,7 +85,6 @@ public class MainFormUI extends javax.swing.JFrame {
                     if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
                         OpenEventsUI oeFrm = new OpenEventsUI(null,true,event);
                         oeFrm.setVisible(true);
-                        dispose();
                     }
 
                     ///to do:open event with event.eventId
