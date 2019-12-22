@@ -9,27 +9,28 @@ import com.tony.goshredding.service.GoService;
 import com.tony.goshredding.vo.EventVO;
 import com.tony.goshredding.vo.NotificationVO;
 import java.util.ArrayList;
-
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author huwei
  */
-public class NotificationCentreUI extends javax.swing.JDialog  {
+public class NotificationCentreUI extends javax.swing.JDialog {
 
     /**
      * Creates new form Login
      */
-    public static String READ_TYPE_UNREAD="1";
-    public static String READ_TYPE_READ="2";
+    public static String READ_TYPE_UNREAD = "1";
+    public static String READ_TYPE_READ = "2";
     ArrayList<NotificationVO> notificationList = new ArrayList<NotificationVO>();
-    public NotificationCentreUI(java.awt.Frame parent, boolean modal) {
-         super(parent, modal);
-        initComponents();
-         try {
 
-                notificationList = GoService.getInstance().getNotificationsByParticipantId(GoService.currentUserId);
-      
+    public NotificationCentreUI(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        try {
+
+            notificationList = GoService.getInstance().getNotificationsByParticipantId(GoService.currentUserId);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,9 +92,19 @@ public class NotificationCentreUI extends javax.swing.JDialog  {
 
         markAsReadBtn.setBackground(new java.awt.Color(72, 124, 175));
         markAsReadBtn.setText("Mark as read");
+        markAsReadBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                markAsReadBtnActionPerformed(evt);
+            }
+        });
 
         deleteBtn.setBackground(new java.awt.Color(72, 124, 175));
         deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
 
         backBtn.setBackground(new java.awt.Color(72, 124, 175));
         backBtn.setText("Back");
@@ -158,6 +169,56 @@ public class NotificationCentreUI extends javax.swing.JDialog  {
 
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void markAsReadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_markAsReadBtnActionPerformed
+        int row = notificationTable.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Please select an notification first");
+        } else {
+            NotificationVO notificationVO = (NotificationVO) notificationList.get(row);
+            try {
+                GoService.getInstance().setNotificationReaded(notificationVO.NotificationID, notificationVO.READ_TYPE_READ);
+
+                //refresh the notification table start.
+                notificationList = GoService.getInstance().getNotificationsByParticipantId(GoService.currentUserId);
+
+                NotificationTableModel notificationTableModel = new NotificationTableModel(notificationList);
+                notificationTable.setModel(notificationTableModel);
+                notificationTable.repaint();
+                //refresh the notification table end.
+            } catch (Exception e) {
+
+            }
+
+        }
+    }//GEN-LAST:event_markAsReadBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        int row = notificationTable.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Please select an notification first");
+        } else {
+            NotificationVO notificationVO = (NotificationVO) notificationList.get(row);
+            try {
+                int delete = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?");
+
+                if (delete == JOptionPane.YES_OPTION) {
+                    GoService.getInstance().deleteNotification(notificationVO.NotificationID);
+
+                    //refresh the notification table start.
+                    notificationList = GoService.getInstance().getNotificationsByParticipantId(GoService.currentUserId);
+
+                    NotificationTableModel notificationTableModel = new NotificationTableModel(notificationList);
+                    notificationTable.setModel(notificationTableModel);
+                    notificationTable.repaint();
+                }
+                //refresh the notification table end.
+            } catch (Exception e) {
+
+            }
+
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,7 +313,7 @@ public class NotificationCentreUI extends javax.swing.JDialog  {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                  NotificationCentreUI dialog = new NotificationCentreUI(new javax.swing.JFrame(), true);
+                NotificationCentreUI dialog = new NotificationCentreUI(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

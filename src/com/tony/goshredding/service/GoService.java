@@ -236,7 +236,20 @@ public class GoService extends SqliteHelper {
         this.executeInsert("event_table", map);
 
     }
+    public void setNotificationReaded(String notificationId,String isReaded) throws Exception {
+        StringBuffer updSql = new StringBuffer();
+        updSql.append("UPDATE ");
+        updSql.append("notification_table");
+        updSql.append(" SET ");
+        updSql.append(" isReaded = '");
+        updSql.append(isReaded);
+        updSql.append("' WHERE NotificationID='");
+        updSql.append(notificationId);
+        updSql.append("'");
 
+        this.executeUpdate(updSql.toString());
+
+    }
     public void updateEvent(EventVO eventVO) throws Exception {
         StringBuffer updSql = new StringBuffer();
         updSql.append("UPDATE ");
@@ -251,7 +264,9 @@ public class GoService extends SqliteHelper {
         this.executeUpdate(updSql.toString());
 
     }
-
+    public void deleteNotification(String notificationID) throws Exception {
+        this.executeUpdate("delete from notification_table where NotificationID='" + notificationID + "'");
+    }
     public void deleteEvent(EventVO eventVO) throws Exception {
         this.executeUpdate("delete from event_table where event_id='" + eventVO.eventId + "'");
     }
