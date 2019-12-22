@@ -5,6 +5,13 @@
  */
 package com.tony.goshredding.ui;
 
+import com.tony.goshredding.service.GoService;
+import com.tony.goshredding.vo.CommentVO;
+import com.tony.goshredding.vo.EventVO;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author huwei
@@ -14,6 +21,7 @@ public class writeReviewUI extends javax.swing.JDialog {
     /**
      * Creates new form Login
      */
+    public String eventId="";
     public writeReviewUI(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -32,7 +40,7 @@ public class writeReviewUI extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        commentTextArea = new javax.swing.JTextArea();
         backBtn = new javax.swing.JButton();
         submitBtn = new javax.swing.JButton();
 
@@ -50,9 +58,9 @@ public class writeReviewUI extends javax.swing.JDialog {
         jLabel2.setText("what you like/dislike about this event:");
         jLabel2.setToolTipText("");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        commentTextArea.setColumns(20);
+        commentTextArea.setRows(5);
+        jScrollPane1.setViewportView(commentTextArea);
 
         backBtn.setBackground(new java.awt.Color(72, 124, 175));
         backBtn.setText("Back");
@@ -129,7 +137,22 @@ public class writeReviewUI extends javax.swing.JDialog {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        try {
+            CommentVO commentVO = new CommentVO();
+            commentVO.Content = commentTextArea.getText();
+            commentVO.ParticipantID = GoService.currentUserId;
+            commentVO.EventID =eventId;
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String dateString = formatter.format(currentTime);
+            commentVO.Date = dateString;
 
+            GoService.getInstance().addComment(commentVO);
+            JOptionPane.showMessageDialog(null, "successfully saved");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.dispose();
     }//GEN-LAST:event_submitBtnActionPerformed
 
@@ -177,11 +200,11 @@ public class writeReviewUI extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
+    private javax.swing.JTextArea commentTextArea;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton submitBtn;
     // End of variables declaration//GEN-END:variables
 }

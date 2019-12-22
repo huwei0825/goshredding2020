@@ -7,7 +7,7 @@ package com.tony.goshredding.vo;
 
 /**
  *
- * @author SXR
+ * @author SXRContent
  */
 public class CommentVO {
 

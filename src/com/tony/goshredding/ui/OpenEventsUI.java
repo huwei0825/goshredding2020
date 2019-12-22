@@ -448,7 +448,20 @@ public class OpenEventsUI extends javax.swing.JDialog {
     private void reviewDeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reviewDeleteBtnActionPerformed
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
             writeReviewUI wrFrm = new writeReviewUI(null, true);
+            wrFrm.eventId=event.eventId;
             wrFrm.setVisible(true);
+
+            //refresh the comment table start.
+            try {
+
+                commentList = GoService.getInstance().getCommentsByEventId(event.eventId);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            CommentTableModel commentTableModel = new CommentTableModel(commentList);
+            commentTable.setModel(commentTableModel);
+            //refresh the comment table end.
         }
     }//GEN-LAST:event_reviewDeleteBtnActionPerformed
 
