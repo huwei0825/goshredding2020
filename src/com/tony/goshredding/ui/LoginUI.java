@@ -50,7 +50,7 @@ public class LoginUI extends javax.swing.JFrame {
         jLabel1.setText("Login");
 
         usernameTxt.setFont(new java.awt.Font("Lucida Grande", 0, 15)); // NOI18N
-        usernameTxt.setText("t");
+        usernameTxt.setText("e");
 
         loginBtn.setBackground(new java.awt.Color(72, 124, 175));
         loginBtn.setText("Log in");

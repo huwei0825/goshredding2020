@@ -12,14 +12,17 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author syp386
  */
-public class EventTableModel extends AbstractTableModel{
-    private ArrayList eventList=null;
-    public EventTableModel(ArrayList eventList){
-        this.eventList=eventList;
+public class EventTableModel extends AbstractTableModel {
+
+    private ArrayList eventList = null;
+
+    public EventTableModel(ArrayList eventList) {
+        this.eventList = eventList;
     }
+
     @Override
     public int getRowCount() {
-         return eventList.size();
+        return eventList.size();
     }
 
     @Override
@@ -27,9 +30,11 @@ public class EventTableModel extends AbstractTableModel{
         return 1;
     }
 
+
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return eventList.get(rowIndex);
     }
-    
+
 }

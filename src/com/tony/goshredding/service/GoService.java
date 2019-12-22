@@ -6,6 +6,7 @@
 package com.tony.goshredding.service;
 
 import com.tony.goshredding.vo.EventVO;
+import com.tony.goshredding.vo.NotificationVO;
 import com.tony.goshredding.vo.OrganizerVO;
 import com.tony.goshredding.vo.ParticipantVO;
 import java.sql.SQLException;
@@ -107,6 +108,26 @@ public class GoService extends SqliteHelper {
                 event.organizerId = resultSet.getString("OrganizerID");
                 event.advertisementId = resultSet.getString("AdvertisementID");
                 rsList.add(event);
+            }
+        } finally {
+            this.destroyed();
+        }
+        return rsList;
+    }
+
+    public ArrayList<NotificationVO> getNotificationsByParticipantId(String userId) throws Exception {
+        ArrayList<NotificationVO> rsList = new ArrayList<NotificationVO>();
+        try {
+            resultSet = this.getStatement().executeQuery("select * from notification_table where ParticipantID='" + userId + "'");
+            while (resultSet.next()) {
+                NotificationVO notification = new NotificationVO();
+                notification.NotificationID = resultSet.getString("NotificationID");
+                notification.ParticipantID = resultSet.getString("ParticipantID");
+                notification.EventID = resultSet.getString("EventID");
+                notification.CreateTime = resultSet.getString("CreateTime");
+                notification.Content = resultSet.getString("Content");
+                notification.isReaded = resultSet.getString("isReaded");
+                rsList.add(notification);
             }
         } finally {
             this.destroyed();
@@ -422,7 +443,7 @@ public class GoService extends SqliteHelper {
     }
 
     public void leaveEvent(String participantId, String eventId) throws Exception {
-        this.executeUpdate("delete from participant_event_table where ParticipantID='" + participantId + "' and EventID='"+eventId+"'");
+        this.executeUpdate("delete from participant_event_table where ParticipantID='" + participantId + "' and EventID='" + eventId + "'");
     }
 
     public void joinEvent(String participantId, String eventId) throws Exception {

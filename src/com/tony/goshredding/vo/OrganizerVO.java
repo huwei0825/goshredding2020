@@ -7,7 +7,7 @@ package com.tony.goshredding.vo;
 
 /**
  *
- * @author huwei
+ * @author Songyun hu
  */
 public class OrganizerVO {
     public String organizerId;

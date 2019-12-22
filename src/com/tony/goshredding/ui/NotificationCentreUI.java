@@ -5,6 +5,11 @@
  */
 package com.tony.goshredding.ui;
 
+import com.tony.goshredding.service.GoService;
+import com.tony.goshredding.vo.EventVO;
+import com.tony.goshredding.vo.NotificationVO;
+import java.util.ArrayList;
+
 
 /**
  *
@@ -15,9 +20,22 @@ public class NotificationCentreUI extends javax.swing.JDialog  {
     /**
      * Creates new form Login
      */
+    public static String READ_TYPE_UNREAD="1";
+    public static String READ_TYPE_READ="2";
+    ArrayList<NotificationVO> notificationList = new ArrayList<NotificationVO>();
     public NotificationCentreUI(java.awt.Frame parent, boolean modal) {
          super(parent, modal);
         initComponents();
+         try {
+
+                notificationList = GoService.getInstance().getNotificationsByParticipantId(GoService.currentUserId);
+      
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NotificationTableModel notificationTableModel = new NotificationTableModel(notificationList);
+        notificationTable.setModel(notificationTableModel);
+        notificationTable.setRowHeight(20);
     }
 
     /**
@@ -32,7 +50,7 @@ public class NotificationCentreUI extends javax.swing.JDialog  {
         jPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        notificationTable = new javax.swing.JTable();
         markAsReadBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
@@ -48,9 +66,9 @@ public class NotificationCentreUI extends javax.swing.JDialog  {
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         jLabel2.setText("Notification Centre");
 
-        jTable1.setBackground(new java.awt.Color(218, 227, 243));
-        jTable1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        notificationTable.setBackground(new java.awt.Color(218, 227, 243));
+        notificationTable.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        notificationTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -69,7 +87,7 @@ public class NotificationCentreUI extends javax.swing.JDialog  {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(notificationTable);
 
         markAsReadBtn.setBackground(new java.awt.Color(72, 124, 175));
         markAsReadBtn.setText("Mark as read");
@@ -252,7 +270,7 @@ public class NotificationCentreUI extends javax.swing.JDialog  {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton markAsReadBtn;
+    private javax.swing.JTable notificationTable;
     // End of variables declaration//GEN-END:variables
 }
