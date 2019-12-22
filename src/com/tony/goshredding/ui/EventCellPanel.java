@@ -29,22 +29,25 @@ public class EventCellPanel extends javax.swing.JPanel {
 
     public EventCellPanel(EventVO eventVO) {
         initComponents();
+      
         this.eventObj = eventVO;
         eventNameLbl.setText(eventObj.eventName);
         eventDateLbl.setText(eventObj.eventDate);
         String time = null;
         String timeSlot = null;
+        if(eventObj.eventTime != null){
         String[] timeArray = eventObj.eventTime.split(":");
         int hours = Integer.parseInt(timeArray[0]);
         String minutes = timeArray[1];
         if (hours >= 0 && hours <= 11) {
-            time = eventObj.eventTime;
+            time = hours + ":" + minutes;
             timeSlot = "AM";
         } else if (hours >= 12 && hours <= 23) {
-            time = String.valueOf(hours - 12) + ":" + minutes;
+            time = (hours - 12) + ":" + minutes;
             timeSlot = "PM";
         }
         timeLbl.setText(time+" "+timeSlot);
+        }
         if (eventObj.eventPicName != null && eventObj.eventPicName.length() > 0) {
             try {
                 File directory = new File("");
@@ -69,6 +72,7 @@ public class EventCellPanel extends javax.swing.JPanel {
                 e.printStackTrace();
             }
         }
+        
     }
 
     /**
@@ -101,14 +105,16 @@ public class EventCellPanel extends javax.swing.JPanel {
         eventNameLbl.setBounds(8, 14, 370, 23);
 
         eventDateLbl.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        eventDateLbl.setText("2019/10/30");
+        eventDateLbl.setMaximumSize(new java.awt.Dimension(110, 20));
+        eventDateLbl.setMinimumSize(new java.awt.Dimension(110, 20));
         jPanel1.add(eventDateLbl);
-        eventDateLbl.setBounds(8, 43, 86, 17);
+        eventDateLbl.setBounds(8, 43, 110, 20);
 
         timeLbl.setFont(new java.awt.Font("Lucida Grande", 0, 17)); // NOI18N
-        timeLbl.setText("12:00 PM");
+        timeLbl.setMaximumSize(new java.awt.Dimension(90, 21));
+        timeLbl.setMinimumSize(new java.awt.Dimension(90, 21));
         jPanel1.add(timeLbl);
-        timeLbl.setBounds(405, 26, 78, 21);
+        timeLbl.setBounds(400, 30, 90, 20);
         jPanel1.add(imageLbl);
         imageLbl.setBounds(528, 8, 104, 60);
         jPanel1.add(eventTypeLbl);

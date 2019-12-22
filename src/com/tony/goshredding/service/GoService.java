@@ -64,16 +64,6 @@ public class GoService extends SqliteHelper {
         return rsList;
     }
 
-    public ArrayList<ParticipantVO> getEventByParticipantId(String userId) throws Exception {
-        ArrayList<ParticipantVO> rsList = new ArrayList<ParticipantVO>();
-        try {
-
-        } finally {
-            this.destroyed();
-        }
-        return rsList;
-    }
-
     public ArrayList<EventVO> getEventByOrganizerId(String userId) throws Exception {
         ArrayList<EventVO> rsList = new ArrayList<EventVO>();
         try {
@@ -126,7 +116,7 @@ public class GoService extends SqliteHelper {
     public ArrayList<EventVO> getEventsByParticipantId(String userId) throws Exception {
         ArrayList<EventVO> rsList = new ArrayList<EventVO>();
         try {
-            resultSet = this.getStatement().executeQuery("select a.* from event_table a,﻿participant_event_table b where a.EventID=b.EventID and b.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
+            resultSet = this.getStatement().executeQuery("select a.* from event_table a,﻿participant_event_table b where a.EventID = b.EventID and b.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
             while (resultSet.next()) {
                 EventVO event = new EventVO();
                 event.eventId = resultSet.getString("EventID");
@@ -150,12 +140,7 @@ public class GoService extends SqliteHelper {
     public ArrayList<EventVO> getUnjoinedEventsByParticipantId(String userId) throws Exception {
         ArrayList<EventVO> rsList = new ArrayList<EventVO>();
         try {
-//                       resultSet = this.getStatement().executeQuery("select b.* from event_table b,participant_event_table a where b.EventID<>a.EventID and a.ParticipantID='" + Integer.parseInt(userId) + "'");
-//resultSet = this.getStatement().executeQuery("select ParticipantUserID from participant_event_table");
-            resultSet = this.getStatement().executeQuery("select a.* from event_table a,participant_event_table b where a.EventID<>b.EventID and b.ParticipantID='" + Integer.parseInt(userId) + "'");
-//            resultSet = this.getStatement().executeQuery("select event_table.* from event_table inner join participant_event_table on event_table.EventID<>participant_event_table.EventID and participant_event_table.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
-
-            
+            resultSet = this.getStatement().executeQuery("select a.* from event_table a");//,﻿participant_event_table b where a.EventID<>b.EventID and b.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
             while (resultSet.next()) {
                 EventVO event = new EventVO();
                 event.eventId = resultSet.getString("EventID");
@@ -432,24 +417,12 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
-
-    public void insertParticipant(ParticipantVO participantVO) throws Exception {
-        String strNewId = getNextMaxID("participant_table", "ParticipantID");
+    public void joinEvent(String participantId, String eventId) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("ParticipantID", strNewId);
-        map.put("Username", participantVO.username);
-        map.put("Password", participantVO.password);
-        map.put("Forename", participantVO.forename);
-        map.put("Surname", participantVO.surname);
-        map.put("DOB", participantVO.dob);
-        map.put("Address1", participantVO.add1);
-        map.put("Address2", participantVO.add2);
-        map.put("Postcode", participantVO.postcode);
-        map.put("ContactNumber", participantVO.num);
-        map.put("Email", participantVO.email);
-        this.executeInsert("participant_table", map);
+        map.put("ParticipantID", participantId);
+        map.put("EventID", eventId);
+        this.executeInsert("participant_event_table", map);
     }
-
     public void updateParticipant(ParticipantVO participantVO) throws Exception {
 
     }

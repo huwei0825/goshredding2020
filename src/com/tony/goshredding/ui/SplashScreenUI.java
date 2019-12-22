@@ -62,7 +62,7 @@ public class SplashScreenUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             // TODO add your handling code here:
-            Thread.sleep(2000);
+            Thread.sleep(1500);
             LoginUI login = new LoginUI();
 
             login.setVisible(true);

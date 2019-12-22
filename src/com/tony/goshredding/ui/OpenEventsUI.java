@@ -9,6 +9,7 @@ import com.tony.goshredding.service.GoService;
 import com.tony.goshredding.vo.EventVO;
 import java.awt.Image;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 /**
@@ -76,7 +77,23 @@ public class OpenEventsUI extends javax.swing.JFrame {
             reviewDeleteBtn.setText("delete");
         }
         if (GoService.currentUserType == 2) {
-
+            ArrayList<EventVO> eventList = new ArrayList<EventVO>();
+            try{
+            eventList = GoService.getInstance().getEventsByParticipantId(GoService.currentUserId);
+            }catch(Exception e){
+            }
+            boolean found = false;
+            for(int i = 0; i<eventList.size(); i++){
+                EventVO event2 = new EventVO();
+                event2= eventList.get(i);
+                if(event2.eventId == event.eventId){
+                    found = true;
+                }
+            }
+            if(found == true){
+                joinEditBtn.setEnabled(false);
+                joinEditBtn.setText("joined");
+            }
             manageMembersBtn.remove(manageMembersBtn);
         }
 
@@ -432,7 +449,18 @@ public class OpenEventsUI extends javax.swing.JFrame {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void joinEditBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinEditBtnActionPerformed
-        
+    if (GoService.currentUserType == 1) {
+//            EventInformationUI ei = new EventInformationUI();
+//            ei.setVisible(true);
+//            this.dispose();
+        }
+        if (GoService.currentUserType == 2) {
+            try{
+            GoService.getInstance().joinEvent(GoService.currentUserId, event.eventId);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_joinEditBtnActionPerformed
 
     /**
