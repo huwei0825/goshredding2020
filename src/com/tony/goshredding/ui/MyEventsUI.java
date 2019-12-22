@@ -324,7 +324,7 @@ public class MyEventsUI extends javax.swing.JDialog {
                     }
 
                 }
-            } else {//USER_TYPE_PARTICIPANT
+            } else {//leave the event.
                 int row = myEventsTable.getSelectedRow();
                 if (row < 0) {
                     JOptionPane.showMessageDialog(null, "Please select an event first");
@@ -342,7 +342,7 @@ public class MyEventsUI extends javax.swing.JDialog {
 
                 }
             }
-            ///refresh the event list.
+            ///refresh the event list start.
             try {
 
                 if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
@@ -362,6 +362,8 @@ public class MyEventsUI extends javax.swing.JDialog {
             tc.setPreferredWidth(200);
             tc.setCellRenderer(new MyEventCellRender());
             myEventsTable.repaint();
+            ///refresh the event list end.
+            
         } catch (Exception e) {
 
         }
