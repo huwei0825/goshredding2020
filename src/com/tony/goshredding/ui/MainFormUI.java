@@ -38,6 +38,7 @@ public class MainFormUI extends javax.swing.JFrame {
         initComponents();
         if (GoService.currentUserType == 1) {
             notificationNewGroupBtn.setText("New Event");
+            titleLbl.setText("Events By Other Organizers");
         }
         myProfileLbl.addMouseListener(new com.tony.goshredding.ui.MainFormUI.MyMouseAdapter(myProfileLbl));
         //eventTable
@@ -49,7 +50,7 @@ public class MainFormUI extends javax.swing.JFrame {
         eventTable.getTableHeader().setDefaultRenderer(renderer);
         if (GoService.currentUserType == 2) {
             try {
-
+                recommandEventList = GoService.getInstance().getUnjoinedEventsByParticipantId(GoService.currentUserId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -76,7 +77,7 @@ public class MainFormUI extends javax.swing.JFrame {
         //double click events
         eventTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {//点击几次，这里是双击事件
+                if (e.getClickCount() == 2) {//how many time the user clicks will open the event
                     int row = eventTable.getSelectedRow();
                     EventVO event = (EventVO) eventTable.getValueAt(row, 0);
                     if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
@@ -130,7 +131,7 @@ public class MainFormUI extends javax.swing.JFrame {
         greetingTxt = new javax.swing.JLabel();
         dateTxt = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
+        titleLbl = new javax.swing.JLabel();
         searchBtn1 = new javax.swing.JButton();
         filterComboBox = new javax.swing.JComboBox<>();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -180,22 +181,22 @@ public class MainFormUI extends javax.swing.JFrame {
         greetingTxt.setForeground(new java.awt.Color(68, 114, 196));
         greetingTxt.setText("Good morning, Tony");
         jPanel.add(greetingTxt);
-        greetingTxt.setBounds(470, 20, 140, 18);
+        greetingTxt.setBounds(470, 20, 140, 16);
 
         dateTxt.setForeground(new java.awt.Color(68, 114, 196));
         dateTxt.setText("dd/mm/yyyy 9:00 AM");
         jPanel.add(dateTxt);
-        dateTxt.setBounds(620, 20, 144, 18);
+        dateTxt.setBounds(620, 20, 138, 16);
 
         jLabel3.setForeground(new java.awt.Color(68, 114, 196));
         jLabel3.setText("\"Do want you can't\" --- Casey Neistat");
         jPanel.add(jLabel3);
-        jLabel3.setBounds(30, 20, 320, 18);
+        jLabel3.setBounds(30, 20, 320, 16);
 
-        jLabel20.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
-        jLabel20.setText("Find your next event");
-        jPanel.add(jLabel20);
-        jLabel20.setBounds(30, 40, 260, 34);
+        titleLbl.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        titleLbl.setText("Find your next event");
+        jPanel.add(titleLbl);
+        titleLbl.setBounds(30, 40, 330, 30);
 
         searchBtn1.setBackground(new java.awt.Color(72, 124, 175));
         searchBtn1.setText("search");
@@ -205,7 +206,7 @@ public class MainFormUI extends javax.swing.JFrame {
             }
         });
         jPanel.add(searchBtn1);
-        searchBtn1.setBounds(200, 83, 81, 35);
+        searchBtn1.setBounds(200, 83, 85, 35);
 
         filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All types", "biking", "skateboarding", "snowboarding", " ", " " }));
         filterComboBox.setToolTipText("");
@@ -220,7 +221,7 @@ public class MainFormUI extends javax.swing.JFrame {
             }
         });
         jPanel.add(filterComboBox);
-        filterComboBox.setBounds(510, 83, 133, 35);
+        filterComboBox.setBounds(510, 83, 146, 35);
 
         eventTable.setBackground(new java.awt.Color(239, 246, 254));
         eventTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -519,7 +520,6 @@ public class MainFormUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> filterComboBox;
     private javax.swing.JLabel greetingTxt;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLayeredPane jLayeredPane1;
@@ -533,5 +533,6 @@ public class MainFormUI extends javax.swing.JFrame {
     private javax.swing.JButton searchBtn1;
     private javax.swing.JTextField searchTxt;
     private javax.swing.JComboBox<String> sortComboBox;
+    private javax.swing.JLabel titleLbl;
     // End of variables declaration//GEN-END:variables
 }
