@@ -5,6 +5,7 @@
  */
 package com.tony.goshredding.service;
 
+import com.tony.goshredding.vo.CommentVO;
 import com.tony.goshredding.vo.EventVO;
 import com.tony.goshredding.vo.NotificationVO;
 import com.tony.goshredding.vo.OrganizerVO;
@@ -114,7 +115,25 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
-
+ public ArrayList<CommentVO> getCommentsByEventId(String eventId) throws Exception {
+        ArrayList<CommentVO> rsList = new ArrayList<CommentVO>();
+        try {
+            resultSet = this.getStatement().executeQuery("select a.*,b.Username from comment_table a left join participant_table b on a.ParticipantID=b.ParticipantID where a.EventID='" + eventId + "'");
+            while (resultSet.next()) {
+                CommentVO comment = new CommentVO();
+                comment.CommentID = resultSet.getString("CommentID");
+                comment.ParticipantID = resultSet.getString("ParticipantID");
+                comment.ParticipantUserName = resultSet.getString("Username");
+                comment.EventID = resultSet.getString("EventID");
+                comment.Content = resultSet.getString("Content");
+                comment.Date = resultSet.getString("Date");
+                rsList.add(comment);
+            }
+        } finally {
+            this.destroyed();
+        }
+        return rsList;
+    }
     public ArrayList<NotificationVO> getNotificationsByParticipantId(String userId) throws Exception {
         ArrayList<NotificationVO> rsList = new ArrayList<NotificationVO>();
         try {
@@ -217,7 +236,19 @@ public class GoService extends SqliteHelper {
         } while (swap == true);
         return eventList;
     }
+    public void addComment(CommentVO commentVO) throws Exception {
+        String strNewId = getNextMaxID("comment_table", "CommentID");
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("CommentID", strNewId);
+        map.put("ParticipantID", commentVO.ParticipantID);
+        map.put("EventID", commentVO.EventID);
+        map.put("Content", commentVO.Content);
+        map.put("Date", commentVO.Date);
 
+
+        this.executeInsert("comment_table", map);
+
+    }
     public void addEvent(EventVO eventVO) throws Exception {
         String strNewId = getNextMaxID("event_table", "EventID");
         Map<String, Object> map = new HashMap<String, Object>();
@@ -236,7 +267,8 @@ public class GoService extends SqliteHelper {
         this.executeInsert("event_table", map);
 
     }
-    public void setNotificationReaded(String notificationId,String isReaded) throws Exception {
+
+    public void setNotificationReaded(String notificationId, String isReaded) throws Exception {
         StringBuffer updSql = new StringBuffer();
         updSql.append("UPDATE ");
         updSql.append("notification_table");
@@ -250,6 +282,7 @@ public class GoService extends SqliteHelper {
         this.executeUpdate(updSql.toString());
 
     }
+
     public void updateEvent(EventVO eventVO) throws Exception {
         StringBuffer updSql = new StringBuffer();
         updSql.append("UPDATE ");
@@ -264,9 +297,15 @@ public class GoService extends SqliteHelper {
         this.executeUpdate(updSql.toString());
 
     }
+
     public void deleteNotification(String notificationID) throws Exception {
         this.executeUpdate("delete from notification_table where NotificationID='" + notificationID + "'");
     }
+
+    public void deleteComment(String commentID) throws Exception {
+        this.executeUpdate("delete from comment_table where CommentID='" + commentID + "'");
+    }
+
     public void deleteEvent(EventVO eventVO) throws Exception {
         this.executeUpdate("delete from event_table where event_id='" + eventVO.eventId + "'");
     }
