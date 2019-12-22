@@ -50,7 +50,7 @@ public class MainFormUI extends javax.swing.JFrame {
         eventTable.getTableHeader().setDefaultRenderer(renderer);
         if (GoService.currentUserType == 2) {
             try {
-                recommandEventList = GoService.getInstance().getUnjoinedEventsByParticipantId(GoService.currentUserId);
+                recommandEventList = GoService.getInstance().getEventsByParticipantId(GoService.currentUserId);
             } catch (Exception e) {
                 e.printStackTrace();
             }

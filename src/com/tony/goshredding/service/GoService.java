@@ -150,7 +150,12 @@ public class GoService extends SqliteHelper {
     public ArrayList<EventVO> getUnjoinedEventsByParticipantId(String userId) throws Exception {
         ArrayList<EventVO> rsList = new ArrayList<EventVO>();
         try {
-            resultSet = this.getStatement().executeQuery("select a.* from event_table a,﻿participant_event_table b where a.EventID<>b.EventID and b.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
+//                       resultSet = this.getStatement().executeQuery("select b.* from event_table b,participant_event_table a where b.EventID<>a.EventID and a.ParticipantID='" + Integer.parseInt(userId) + "'");
+//resultSet = this.getStatement().executeQuery("select ParticipantUserID from participant_event_table");
+            resultSet = this.getStatement().executeQuery("select a.* from event_table a,participant_event_table b where a.EventID<>b.EventID and b.ParticipantID='" + Integer.parseInt(userId) + "'");
+//            resultSet = this.getStatement().executeQuery("select event_table.* from event_table inner join participant_event_table on event_table.EventID<>participant_event_table.EventID and participant_event_table.﻿ParticipantID='" + Integer.parseInt(userId) + "'");
+
+            
             while (resultSet.next()) {
                 EventVO event = new EventVO();
                 event.eventId = resultSet.getString("EventID");

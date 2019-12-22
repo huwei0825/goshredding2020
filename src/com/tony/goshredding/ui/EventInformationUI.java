@@ -77,7 +77,6 @@ public class EventInformationUI extends javax.swing.JFrame {
     public EventInformationUI() {
         initComponents();
 
-
         try {
 //
 //            Image image = new ImageIcon(getClass().getResource("/files/giantBike.png")).getImage();
@@ -466,7 +465,7 @@ public class EventInformationUI extends javax.swing.JFrame {
     }//GEN-LAST:event_changeAdBtnActionPerformed
 
     private void uploadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadBtnActionPerformed
-  JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser();
         int returnVal = chooser.showOpenDialog(uploadBtn);
         chooser.setFileFilter(new FileFilter() {
             @Override
