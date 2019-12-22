@@ -469,7 +469,31 @@ public class GoService extends SqliteHelper {
     public void deleteOrganizer(OrganizerVO organizerVO) throws Exception {
         this.executeUpdate("delete from organizer_table where OrganizerID='" + organizerVO.organizerId + "'");
     }
+    public ArrayList<ParticipantVO> getParticipantsByEventId(String eventId) throws Exception {
+        ArrayList<ParticipantVO> rsList = new ArrayList<ParticipantVO>();
+        try {
+            resultSet = this.getStatement().executeQuery("select a.* from participant_table a,participant_event_table b where a.ParticipantID=b.ParticipantID and b.EventID = '" + eventId + "'");
+            while (resultSet.next()) {
+                ParticipantVO participant = new ParticipantVO();
+                participant.participantId = resultSet.getString("ParticipantID");
+                participant.username = resultSet.getString("Username");
+                participant.password = resultSet.getString("Password");
+                participant.forename = resultSet.getString("Forename");
+                participant.surname = resultSet.getString("Surname");
+                participant.dob = resultSet.getString("DOB");
+                participant.add1 = resultSet.getString("Address1");
+                participant.add2 = resultSet.getString("Address2");
+                participant.postcode = resultSet.getString("Postcode");
+                participant.num = resultSet.getString("ContactNumber");
+                participant.email = resultSet.getString("Email");
 
+                rsList.add(participant);
+            }
+        } finally {
+            this.destroyed();
+        }
+        return rsList;
+    }
     public ArrayList<ParticipantVO> getParticipantByUsername(String username) throws Exception {
         ArrayList<ParticipantVO> rsList = new ArrayList<ParticipantVO>();
         try {

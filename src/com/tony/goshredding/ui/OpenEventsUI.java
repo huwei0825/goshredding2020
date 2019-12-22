@@ -8,6 +8,7 @@ package com.tony.goshredding.ui;
 import com.tony.goshredding.service.GoService;
 import com.tony.goshredding.vo.CommentVO;
 import com.tony.goshredding.vo.EventVO;
+import com.tony.goshredding.vo.ParticipantVO;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
@@ -99,6 +100,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
             }
             manageMembersBtn.remove(manageMembersBtn);
 
+            //display this event's comment start.
             try {
 
                 commentList = GoService.getInstance().getCommentsByEventId(event.eventId);
@@ -109,6 +111,17 @@ public class OpenEventsUI extends javax.swing.JDialog {
             CommentTableModel commentTableModel = new CommentTableModel(commentList);
             commentTable.setModel(commentTableModel);
             commentTable.setRowHeight(20);
+            //display this event's comment end..
+            
+            //display this event's participant numbers .
+            try {
+
+                ArrayList<ParticipantVO> participantList = GoService.getInstance().getParticipantsByEventId(event.eventId);
+                numberOfMembersTxt.setText(""+participantList.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
 
     }
