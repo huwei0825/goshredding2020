@@ -530,7 +530,6 @@ public class GoService extends SqliteHelper {
         map.put("EventID", eventId);
         this.executeInsert("participant_event_table", map);
     }
-
     public void updateParticipant(ParticipantVO participantVO) throws Exception {
 
     }
