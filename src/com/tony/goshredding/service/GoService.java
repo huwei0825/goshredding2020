@@ -67,7 +67,30 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
-
+    public ArrayList<EventVO> getEventByAdvertisementId(String advertisementId) throws Exception {
+        ArrayList<EventVO> rsList = new ArrayList<EventVO>();
+        try {
+            resultSet = this.getStatement().executeQuery("select * from event_table where AdvertisementID = '" + advertisementId + "'");
+            while (resultSet.next()) {
+                EventVO event = new EventVO();
+                event.eventId = resultSet.getString("EventID");
+                event.eventName = resultSet.getString("EventName");
+                event.eventPicName = resultSet.getString("ImageName");
+                event.eventTime = resultSet.getString("Time");
+                event.eventDate = resultSet.getString("Date");
+                event.eventType = resultSet.getString("EventType");
+                event.eventTypePicName = resultSet.getString("EventTypeImageName");
+                event.introduction = resultSet.getString("EventIntroduction");
+                event.location = resultSet.getString("Location");
+                event.organizerId = resultSet.getString("OrganizerID");
+                event.advertisementId = resultSet.getString("AdvertisementID");
+                rsList.add(event);
+            }
+        } finally {
+            this.destroyed();
+        }
+        return rsList;
+    }
     public ArrayList<EventVO> getEventByOrganizerId(String userId) throws Exception {
         ArrayList<EventVO> rsList = new ArrayList<EventVO>();
         try {

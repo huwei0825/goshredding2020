@@ -325,15 +325,21 @@ public class advertisementManagementUI extends javax.swing.JDialog {
 
             if (delete == JOptionPane.YES_OPTION) {
                 try {
-                    GoService.getInstance().deleteAdvertisement(advertisementVO.AdvertisementID);
-                    //refresh advertisement data.
-                    try {
-                        advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    // if the advertisement has been used,it can't be deleted.
+                    ArrayList<EventVO> events = GoService.getInstance().getEventByAdvertisementId(advertisementVO.AdvertisementID);
+                    if (events.size() > 0) {
+                        JOptionPane.showMessageDialog(null, "The advertisement has been used,it can't be deleted.");
+                    } else {
+                        GoService.getInstance().deleteAdvertisement(advertisementVO.AdvertisementID);
+                        //refresh advertisement data.
+                        try {
+                            advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        advertisementList = advertisementListOriginal;
+                        initTableData();
                     }
-                    advertisementList = advertisementListOriginal;
-                    initTableData();
                 } catch (Exception e) {
 
                 }
