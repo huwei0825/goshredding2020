@@ -493,7 +493,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void manageMembersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageMembersBtnActionPerformed
-        membersManagementUI mmFrm = new membersManagementUI(null, true);
+        membersManagementUI mmFrm = new membersManagementUI(null, true,event.eventId);
         mmFrm.setVisible(true);
     }//GEN-LAST:event_manageMembersBtnActionPerformed
 

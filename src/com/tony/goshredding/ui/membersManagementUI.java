@@ -5,6 +5,13 @@
  */
 package com.tony.goshredding.ui;
 
+import com.tony.goshredding.service.GoService;
+import com.tony.goshredding.vo.AdvertisementVO;
+import com.tony.goshredding.vo.CommentVO;
+import com.tony.goshredding.vo.ParticipantVO;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author huwei
@@ -14,9 +21,25 @@ public class membersManagementUI extends javax.swing.JDialog {
     /**
      * Creates new form Login
      */
-    public membersManagementUI(java.awt.Frame parent, boolean modal) {
+    private String currentEventId = "";
+    ArrayList<ParticipantVO> participantList = new ArrayList<ParticipantVO>();
+    ArrayList<ParticipantVO> participantListOriginal = new ArrayList<ParticipantVO>();
+    
+    public membersManagementUI(java.awt.Frame parent, boolean modal, String strEventId) {
         super(parent, modal);
+        currentEventId = strEventId;
         initComponents();
+        try {
+            participantListOriginal = GoService.getInstance().getParticipantsByEventId(currentEventId);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        participantList = participantListOriginal;
+        MemeberTableModel memeberTableModel = new MemeberTableModel(participantList);
+        memberTable.setModel(memeberTableModel);
+        
     }
 
     /**
@@ -31,12 +54,12 @@ public class membersManagementUI extends javax.swing.JDialog {
         jPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        memberTable = new javax.swing.JTable();
+        searchTxt = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
+        alljBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
@@ -49,9 +72,9 @@ public class membersManagementUI extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         jLabel2.setText("Members management");
 
-        jTable1.setBackground(new java.awt.Color(218, 227, 243));
-        jTable1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        memberTable.setBackground(new java.awt.Color(218, 227, 243));
+        memberTable.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        memberTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -62,10 +85,15 @@ public class membersManagementUI extends javax.swing.JDialog {
                 "Participant ID", "Forename", "Surname", "DOB", "Address1", "Address2", "Postcode", "Contact number"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(memberTable);
 
-        jButton2.setBackground(new java.awt.Color(72, 124, 175));
-        jButton2.setText("search");
+        searchBtn.setBackground(new java.awt.Color(72, 124, 175));
+        searchBtn.setText("search");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtnActionPerformed(evt);
+            }
+        });
 
         backBtn.setBackground(new java.awt.Color(72, 124, 175));
         backBtn.setText("Back");
@@ -75,14 +103,19 @@ public class membersManagementUI extends javax.swing.JDialog {
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(72, 124, 175));
-        jButton5.setText("Delete");
-
-        jButton3.setBackground(new java.awt.Color(72, 124, 175));
-        jButton3.setText("All");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        deleteBtn.setBackground(new java.awt.Color(72, 124, 175));
+        deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                deleteBtnActionPerformed(evt);
+            }
+        });
+
+        alljBtn.setBackground(new java.awt.Color(72, 124, 175));
+        alljBtn.setText("All");
+        alljBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alljBtnActionPerformed(evt);
             }
         });
 
@@ -96,14 +129,14 @@ public class membersManagementUI extends javax.swing.JDialog {
                         .addGap(43, 43, 43)
                         .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelLayout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(alljBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(jPanelLayout.createSequentialGroup()
-                                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
                                     .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 760, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -119,15 +152,15 @@ public class membersManagementUI extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(alljBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -147,13 +180,58 @@ public class membersManagementUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-
+        
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void alljBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alljBtnActionPerformed
+        searchTxt.setText("");
+        participantList = participantListOriginal;
+        MemeberTableModel memeberTableModel = new MemeberTableModel(participantList);
+        memberTable.setModel(memeberTableModel);
+        memberTable.repaint();
+    }//GEN-LAST:event_alljBtnActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+        String searchItem = searchTxt.getText();
+        ArrayList<ParticipantVO> participantListNew = new ArrayList<ParticipantVO>();
+        
+        for (int i = 0; i < participantListOriginal.size(); i++) {
+            ParticipantVO participantVO = participantListOriginal.get(i);
+            if (participantVO.username.contains(searchItem)) {
+                participantListNew.add(participantVO);
+            }
+        }
+        participantList = participantListNew;
+        MemeberTableModel memeberTableModel = new MemeberTableModel(participantList);
+        memberTable.setModel(memeberTableModel);
+        memberTable.repaint();
+    }//GEN-LAST:event_searchBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        int row = memberTable.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a member first");
+        } else {
+            ParticipantVO participantVO = participantList.get(row);
+            int delete = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?");
+            
+            if (delete == JOptionPane.YES_OPTION) {
+                try {
+                    GoService.getInstance().leaveEvent(participantVO.participantId, currentEventId);
+                    //refresh member data.
+                    participantListOriginal = GoService.getInstance().getParticipantsByEventId(currentEventId);
+                    participantList = participantListOriginal;
+                    MemeberTableModel memeberTableModel = new MemeberTableModel(participantList);
+                    memberTable.setModel(memeberTableModel);
+                    memberTable.repaint();
+                } catch (Exception e) {
+                    
+                }
+            }
+            
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -206,14 +284,14 @@ public class membersManagementUI extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton alljBtn;
     private javax.swing.JButton backBtn;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton deleteBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable memberTable;
+    private javax.swing.JButton searchBtn;
+    private javax.swing.JTextField searchTxt;
     // End of variables declaration//GEN-END:variables
 }
