@@ -6,30 +6,56 @@
 package com.tony.goshredding.ui;
 
 import com.tony.goshredding.service.GoService;
+import com.tony.goshredding.vo.AdvertisementVO;
+import com.tony.goshredding.vo.EventVO;
+import java.util.ArrayList;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
  * @author huwei
  */
-public class advertisementManagementUI extends javax.swing.JDialog{
+public class advertisementManagementUI extends javax.swing.JDialog {
 
     /**
      * Creates new form Login
      */
     private int currentUseType = USE_TYPE_CHOOSE;
-    public static int USE_TYPE_CHOOSE=0;
-    public static int USE_TYPE_MANAGE=1;
+    public static int USE_TYPE_CHOOSE = 0;
+    public static int USE_TYPE_MANAGE = 1;
+    ArrayList<AdvertisementVO> advertisementList = new ArrayList<AdvertisementVO>();
+    ArrayList<AdvertisementVO> advertisementListOriginal = new ArrayList<AdvertisementVO>();
+
     public advertisementManagementUI(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        advertisementTable.setRowHeight(60);
 
+        try {
+
+            advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        advertisementList = advertisementListOriginal;
+        initTableData();
+        advertisementTable.setDefaultRenderer(Object.class, new AdvertisementCellRender());
+    }
+
+    private void initTableData() {
+        AdvertisementTableModel advertisementTableModel = new AdvertisementTableModel(advertisementList);
+        advertisementTable.setModel(advertisementTableModel);
+        advertisementTable.repaint();
     }
 
     public void setUseType(int _useType) {
         this.currentUseType = _useType;
-        if (this.currentUseType ==USE_TYPE_MANAGE) {
+        if (this.currentUseType == USE_TYPE_MANAGE) {
             chooseBtn.setVisible(false);
-        }else{
+        } else {
             addBtn.setVisible(false);
             deleteBtn.setVisible(false);
             editBtn.setVisible(false);
@@ -48,15 +74,15 @@ public class advertisementManagementUI extends javax.swing.JDialog{
         jPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        advertisementTable = new javax.swing.JTable();
+        searchTextField = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
         addBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
         editBtn = new javax.swing.JButton();
         chooseBtn = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        allBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(239, 246, 254));
@@ -69,9 +95,9 @@ public class advertisementManagementUI extends javax.swing.JDialog{
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         jLabel2.setText("Advertisement management");
 
-        jTable1.setBackground(new java.awt.Color(218, 227, 243));
-        jTable1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        advertisementTable.setBackground(new java.awt.Color(218, 227, 243));
+        advertisementTable.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        advertisementTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -82,10 +108,15 @@ public class advertisementManagementUI extends javax.swing.JDialog{
                 "Advertisement ID", "Ad name", "Supplier", "Content", "Price per person", "Picture"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(advertisementTable);
 
-        jButton2.setBackground(new java.awt.Color(72, 124, 175));
-        jButton2.setText("search");
+        searchBtn.setBackground(new java.awt.Color(72, 124, 175));
+        searchBtn.setText("search");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtnActionPerformed(evt);
+            }
+        });
 
         backBtn.setBackground(new java.awt.Color(72, 124, 175));
         backBtn.setText("Back");
@@ -122,8 +153,13 @@ public class advertisementManagementUI extends javax.swing.JDialog{
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(72, 124, 175));
-        jButton3.setText("All ad");
+        allBtn.setBackground(new java.awt.Color(72, 124, 175));
+        allBtn.setText("All ad");
+        allBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                allBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
         jPanel.setLayout(jPanelLayout);
@@ -138,11 +174,11 @@ public class advertisementManagementUI extends javax.swing.JDialog{
                         .addGap(43, 43, 43)
                         .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelLayout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
+                                .addComponent(searchBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3))
+                                .addComponent(allBtn))
                             .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(jPanelLayout.createSequentialGroup()
                                     .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -164,9 +200,9 @@ public class advertisementManagementUI extends javax.swing.JDialog{
                 .addComponent(jLabel2)
                 .addGap(9, 9, 9)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(allBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -205,14 +241,34 @@ public class advertisementManagementUI extends javax.swing.JDialog{
     }//GEN-LAST:event_chooseBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null,true);
+        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true);
         aiFrm.setVisible(true);
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null,true);
+        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true);
         aiFrm.setVisible(true);
     }//GEN-LAST:event_editBtnActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+
+        String searchItem = searchTextField.getText();
+        ArrayList<AdvertisementVO> advertisementListNew = new ArrayList<AdvertisementVO>();
+
+        for (int i = 0; i < advertisementListOriginal.size(); i++) {
+            AdvertisementVO advertisementVO = advertisementListOriginal.get(i);
+            if (advertisementVO.Content.contains(searchItem)) {
+                advertisementListNew.add(advertisementVO);
+            }
+        }
+        advertisementList=advertisementListNew;
+        initTableData();
+    }//GEN-LAST:event_searchBtnActionPerformed
+
+    private void allBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allBtnActionPerformed
+        advertisementList = advertisementListOriginal;
+        initTableData() ;
+    }//GEN-LAST:event_allBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -258,16 +314,16 @@ public class advertisementManagementUI extends javax.swing.JDialog{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
+    private javax.swing.JTable advertisementTable;
+    private javax.swing.JButton allBtn;
     private javax.swing.JButton backBtn;
     private javax.swing.JButton chooseBtn;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton editBtn;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton searchBtn;
+    private javax.swing.JTextField searchTextField;
     // End of variables declaration//GEN-END:variables
 }
