@@ -452,13 +452,13 @@ public class OpenEventsUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void manageMembersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageMembersBtnActionPerformed
-        MembersManagementUI mmFrm = new MembersManagementUI(null, true);
+        membersManagementUI mmFrm = new membersManagementUI(null, true);
         mmFrm.setVisible(true);
     }//GEN-LAST:event_manageMembersBtnActionPerformed
 
     private void reviewDeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reviewDeleteBtnActionPerformed
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
-            WriteReviewUI wrFrm = new WriteReviewUI(null, true);
+            writeReviewUI wrFrm = new writeReviewUI(null, true);
             wrFrm.eventId = event.eventId;
             wrFrm.setVisible(true);
 
