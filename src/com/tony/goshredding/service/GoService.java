@@ -520,7 +520,29 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
-
+    public OrganizerVO getOrganizerByOrganizerID(String strOrganizerID) throws Exception {
+        OrganizerVO organizer = new OrganizerVO();
+        try {
+            resultSet = this.getStatement().executeQuery("select * from organizer_table where OrganizerID = '" + strOrganizerID + "'");
+            while (resultSet.next()) {
+                organizer.organizerId = resultSet.getString("OrganizerID");
+                organizer.username = resultSet.getString("Username");
+                organizer.password = resultSet.getString("Password");
+                organizer.forename = resultSet.getString("Forename");
+                organizer.surname = resultSet.getString("Surname");
+                organizer.dob = resultSet.getString("DOB");
+                organizer.add1 = resultSet.getString("Address1");
+                organizer.add2 = resultSet.getString("Address2");
+                organizer.postcode = resultSet.getString("Postcode");
+                organizer.num = resultSet.getString("ContactNumber");
+                organizer.email = resultSet.getString("Email");
+                organizer.income = resultSet.getString("Income");
+            }
+        } finally {
+            this.destroyed();
+        }
+        return organizer;
+    }
     public ArrayList<OrganizerVO> getOrganizerByUsername(String username) throws Exception {
         ArrayList<OrganizerVO> rsList = new ArrayList<OrganizerVO>();
         try {
@@ -676,7 +698,6 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
-
     public ArrayList<ParticipantVO> getParticipantByUsername(String username) throws Exception {
         ArrayList<ParticipantVO> rsList = new ArrayList<ParticipantVO>();
         try {
@@ -701,6 +722,29 @@ public class GoService extends SqliteHelper {
             this.destroyed();
         }
         return rsList;
+    }
+    public ParticipantVO getParticipantByParticipantID(String strParticipantID) throws Exception {
+        ParticipantVO participant = new ParticipantVO();
+        try {
+            resultSet = this.getStatement().executeQuery("select * from participant_table where ParticipantID = '" + strParticipantID + "'");
+            while (resultSet.next()) {
+                participant.participantId = resultSet.getString("ParticipantID");
+                participant.username = resultSet.getString("Username");
+                participant.password = resultSet.getString("Password");
+                participant.forename = resultSet.getString("Forename");
+                participant.surname = resultSet.getString("Surname");
+                participant.dob = resultSet.getString("DOB");
+                participant.add1 = resultSet.getString("Address1");
+                participant.add2 = resultSet.getString("Address2");
+                participant.postcode = resultSet.getString("Postcode");
+                participant.num = resultSet.getString("ContactNumber");
+                participant.email = resultSet.getString("Email");
+
+            }
+        } finally {
+            this.destroyed();
+        }
+        return participant;
     }
 
     public void leaveEvent(String participantId, String eventId) throws Exception {

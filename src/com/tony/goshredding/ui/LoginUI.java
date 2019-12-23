@@ -146,7 +146,7 @@ public class LoginUI extends javax.swing.JFrame {
      * @param evt 
      */
     private void signUpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpBtnActionPerformed
-        SignUpUI suFrm = new SignUpUI();
+        UserInformationUI suFrm = new UserInformationUI(null,true,UserInformationUI.USE_TYPE_NEW);
         suFrm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_signUpBtnActionPerformed

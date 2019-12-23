@@ -378,8 +378,8 @@ public class MainFormUI extends javax.swing.JFrame {
 
     private void myProfileLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myProfileLblMouseClicked
 
-        myProfileUI mpFrm = new myProfileUI(null, true);
-        mpFrm.setVisible(true);
+        UserInformationUI suFrm = new UserInformationUI(null,true,UserInformationUI.USE_TYPE_MODIFY);
+        suFrm.setVisible(true);
     }//GEN-LAST:event_myProfileLblMouseClicked
 
     private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
