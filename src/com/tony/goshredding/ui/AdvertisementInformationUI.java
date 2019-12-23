@@ -1,11 +1,15 @@
 package com.tony.goshredding.ui;
 
+import com.tony.goshredding.service.GoService;
 import com.tony.goshredding.util.GoHelper;
+import com.tony.goshredding.vo.AdvertisementVO;
+import com.tony.goshredding.vo.EventVO;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileFilter;
 
@@ -19,12 +23,39 @@ public class AdvertisementInformationUI extends javax.swing.JDialog {
     private String strImageName = "";//the current select advertisement picture.
     public static int OPEN_TYPE_NEW = 1;//used to create a new advertisement.
     public static int OPEN_TYPE_EDIT = 2;//used to edit a existing advertisement.
-    private int currentUserType=1;
-    public AdvertisementInformationUI(java.awt.Frame parent, boolean modal,int openType) {
+    private int currentUseType = OPEN_TYPE_NEW;
+    private String currentAdvertisementId = "";
+    private AdvertisementVO currentAdvertisementVO = null;
+
+    public AdvertisementInformationUI(java.awt.Frame parent, boolean modal, String advertisementId, int openType) {
         super(parent, modal);
-        currentUserType=openType;
+        currentUseType = openType;
+        currentAdvertisementId = advertisementId;
         initComponents();
-        
+        if (advertisementId != null && advertisementId.length() > 0) {
+            try {
+                currentAdvertisementVO = GoService.getInstance().getAdvertisementById(advertisementId);
+                nameTxt.setText(currentAdvertisementVO.AdvertisementName);
+                supplierTxt.setText(currentAdvertisementVO.Supplier);
+                contentTxt.setText(currentAdvertisementVO.Content);
+                priceTxt.setText(currentAdvertisementVO.PricePerPerson);
+                if (currentAdvertisementVO.ImageName != null && currentAdvertisementVO.ImageName.length() > 0) {
+
+                    try {
+                        File directory = new File("");
+                        String filePath = directory.getCanonicalPath() + "/images/" + currentAdvertisementVO.ImageName;
+                        File targetFile = new File(filePath);
+                        Image image = new ImageIcon(targetFile.getAbsolutePath()).getImage();
+                        image = image.getScaledInstance(155, 90, Image.SCALE_SMOOTH);
+                        imageLbl.setIcon(new ImageIcon(image));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+        }
     }
 
     /**
@@ -216,7 +247,36 @@ public class AdvertisementInformationUI extends javax.swing.JDialog {
      * @param evt
      */
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        String organizerId = GoService.currentUserId;
+        String strAdName = nameTxt.getText();
+        String strSupplier = supplierTxt.getText();
+        String strContent = contentTxt.getText();
+        String strPrice = priceTxt.getText();
 
+        try {
+
+            if (currentUseType == AdvertisementInformationUI.OPEN_TYPE_NEW) {
+                AdvertisementVO advertisementVO = new AdvertisementVO();
+                advertisementVO.AdvertisementName = strAdName;
+                advertisementVO.Content = strContent;
+                advertisementVO.OrganizerID = organizerId;
+                advertisementVO.PricePerPerson = strPrice;
+                advertisementVO.Supplier = strSupplier;
+                advertisementVO.ImageName = strImageName;
+                GoService.getInstance().addAdvertisement(advertisementVO);
+            } else if (currentUseType == AdvertisementInformationUI.OPEN_TYPE_EDIT) {
+                currentAdvertisementVO.AdvertisementName = strAdName;
+                currentAdvertisementVO.Content = strContent;
+                currentAdvertisementVO.PricePerPerson = strPrice;
+                currentAdvertisementVO.Supplier = strSupplier;
+                currentAdvertisementVO.ImageName = strImageName;
+                GoService.getInstance().updateAdvertisement(currentAdvertisementVO);
+            }
+            JOptionPane.showMessageDialog(null, "successfully saved");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.dispose();
     }//GEN-LAST:event_saveBtnActionPerformed
     /**

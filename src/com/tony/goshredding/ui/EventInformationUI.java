@@ -393,7 +393,7 @@ public class EventInformationUI extends javax.swing.JDialog {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
-        // TODO add your handling code here:
+
         String organizerId = GoService.currentUserId;
         String name = nameTxt.getText();
         String date = dateTxt.getText();

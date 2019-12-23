@@ -8,6 +8,7 @@ package com.tony.goshredding.ui;
 import com.tony.goshredding.service.GoService;
 import com.tony.goshredding.vo.AdvertisementVO;
 import com.tony.goshredding.vo.EventVO;
+import com.tony.goshredding.vo.ParticipantVO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
@@ -241,7 +242,7 @@ public class advertisementManagementUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        this.returnType=advertisementManagementUI.RETURN_TYPE_BACK;
+        this.returnType = advertisementManagementUI.RETURN_TYPE_BACK;
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
@@ -252,13 +253,13 @@ public class advertisementManagementUI extends javax.swing.JDialog {
         } else {
             AdvertisementVO advertisementObj = (AdvertisementVO) advertisementList.get(row);
             this.selectedAdvertisementId = advertisementObj.AdvertisementID;
-            this.returnType=advertisementManagementUI.RETURN_TYPE_CHOOSE;
+            this.returnType = advertisementManagementUI.RETURN_TYPE_CHOOSE;
         }
         this.dispose();
     }//GEN-LAST:event_chooseBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true, AdvertisementInformationUI.OPEN_TYPE_NEW);
+        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true, "", AdvertisementInformationUI.OPEN_TYPE_NEW);
         aiFrm.setVisible(true);
         try {
             advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
@@ -272,18 +273,26 @@ public class advertisementManagementUI extends javax.swing.JDialog {
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true, AdvertisementInformationUI.OPEN_TYPE_EDIT);
-        aiFrm.setVisible(true);
-        try {
+        int row = advertisementTable.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Please select an advertisement first");
+        } else {
+            AdvertisementVO advertisementVO = advertisementList.get(row);
 
-            advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+            AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true, advertisementVO.AdvertisementID, AdvertisementInformationUI.OPEN_TYPE_EDIT);
+            aiFrm.setVisible(true);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            //refresh advertisement table.
+            try {
+                advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            advertisementList = advertisementListOriginal;
+            initTableData();
+
         }
 
-        advertisementList = advertisementListOriginal;
-        initTableData();
     }//GEN-LAST:event_editBtnActionPerformed
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
@@ -307,16 +316,31 @@ public class advertisementManagementUI extends javax.swing.JDialog {
     }//GEN-LAST:event_allBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        try {
+        int row = advertisementTable.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Please select an advertisement first");
+        } else {
+            AdvertisementVO advertisementVO = advertisementList.get(row);
+            int delete = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?");
 
-            advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+            if (delete == JOptionPane.YES_OPTION) {
+                try {
+                    GoService.getInstance().deleteAdvertisement(advertisementVO.AdvertisementID);
+                    //refresh advertisement data.
+                    try {
+                        advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    advertisementList = advertisementListOriginal;
+                    initTableData();
+                } catch (Exception e) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                }
+            }
+
         }
 
-        advertisementList = advertisementListOriginal;
-        initTableData();
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     /**
