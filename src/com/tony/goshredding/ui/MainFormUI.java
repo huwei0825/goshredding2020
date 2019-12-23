@@ -196,17 +196,17 @@ public class MainFormUI extends javax.swing.JFrame {
         greetingTxt.setForeground(new java.awt.Color(68, 114, 196));
         greetingTxt.setText("Good morning, Tony");
         jPanel.add(greetingTxt);
-        greetingTxt.setBounds(470, 20, 140, 15);
+        greetingTxt.setBounds(470, 20, 140, 18);
 
         dateTxt.setForeground(new java.awt.Color(68, 114, 196));
         dateTxt.setText("dd/mm/yyyy 9:00 AM");
         jPanel.add(dateTxt);
-        dateTxt.setBounds(620, 20, 108, 15);
+        dateTxt.setBounds(620, 20, 144, 18);
 
         jLabel3.setForeground(new java.awt.Color(68, 114, 196));
         jLabel3.setText("\"Do want you can't\" --- Casey Neistat");
         jPanel.add(jLabel3);
-        jLabel3.setBounds(30, 20, 320, 15);
+        jLabel3.setBounds(30, 20, 320, 18);
 
         titleLbl.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         titleLbl.setText("Find your next event");
@@ -221,7 +221,7 @@ public class MainFormUI extends javax.swing.JFrame {
             }
         });
         jPanel.add(searchBtn);
-        searchBtn.setBounds(200, 83, 69, 35);
+        searchBtn.setBounds(200, 83, 81, 35);
 
         filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All types", "biking", "skateboarding", "snowboarding", " ", " " }));
         filterComboBox.setToolTipText("");
@@ -231,7 +231,7 @@ public class MainFormUI extends javax.swing.JFrame {
             }
         });
         jPanel.add(filterComboBox);
-        filterComboBox.setBounds(510, 83, 104, 35);
+        filterComboBox.setBounds(510, 83, 133, 35);
 
         eventTable.setBackground(new java.awt.Color(239, 246, 254));
         eventTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -331,7 +331,7 @@ public class MainFormUI extends javax.swing.JFrame {
         searchTxt.setBounds(1, 3, 160, 35);
 
         jPanel.add(jPanel1);
-        jPanel1.setBounds(30, 80, 650, 40);
+        jPanel1.setBounds(30, 80, 790, 40);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

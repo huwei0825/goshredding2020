@@ -35,7 +35,7 @@ public class MyEventsUI extends javax.swing.JDialog {
     public MyEventsUI(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        editBtn.setVisible(false);
+//        editBtn.setVisible(false);
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
             
             deleteAndLeaveBtn.setText("Leave");
@@ -109,7 +109,6 @@ public class MyEventsUI extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         myEventsTable = new javax.swing.JTable();
         openBtn = new javax.swing.JButton();
-        editBtn = new javax.swing.JButton();
         deleteAndLeaveBtn = new javax.swing.JButton();
         calendarContainerPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -155,14 +154,6 @@ public class MyEventsUI extends javax.swing.JDialog {
             }
         });
 
-        editBtn.setBackground(new java.awt.Color(72, 124, 175));
-        editBtn.setText("Edit");
-        editBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editBtnActionPerformed(evt);
-            }
-        });
-
         deleteAndLeaveBtn.setBackground(new java.awt.Color(72, 124, 175));
         deleteAndLeaveBtn.setText("Delete");
         deleteAndLeaveBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -192,20 +183,16 @@ public class MyEventsUI extends javax.swing.JDialog {
         jPanelLayout.setHorizontalGroup(
             jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelLayout.createSequentialGroup()
+                .addGap(53, 53, 53)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLayout.createSequentialGroup()
-                        .addContainerGap()
+                    .addGroup(jPanelLayout.createSequentialGroup()
+                        .addGap(127, 127, 127)
                         .addComponent(openBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addComponent(deleteAndLeaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanelLayout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(eventTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(eventTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(calendarContainerPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -239,7 +226,6 @@ public class MyEventsUI extends javax.swing.JDialog {
                 .addGap(7, 7, 7)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(openBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteAndLeaveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
@@ -294,16 +280,6 @@ public class MyEventsUI extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_openBtnActionPerformed
-
-    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        int row = myEventsTable.getSelectedRow();
-        EventVO event = (EventVO) eventList.get(row);
-        if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
-            com.tony.goshredding.ui.EventInformationUI eiFrm = new com.tony.goshredding.ui.EventInformationUI(null, true);
-            eiFrm.setEvent(event);
-            eiFrm.setVisible(true);
-        }
-    }//GEN-LAST:event_editBtnActionPerformed
 
     private void deleteAndLeaveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAndLeaveBtnActionPerformed
         // TODO add your handling code here:
@@ -447,7 +423,6 @@ public class MyEventsUI extends javax.swing.JDialog {
     private javax.swing.JButton backBtn;
     private javax.swing.JPanel calendarContainerPanel;
     private javax.swing.JButton deleteAndLeaveBtn;
-    private javax.swing.JButton editBtn;
     private javax.swing.JComboBox<String> eventTypeComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
