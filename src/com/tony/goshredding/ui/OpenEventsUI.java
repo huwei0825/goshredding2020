@@ -27,6 +27,9 @@ public class OpenEventsUI extends javax.swing.JDialog {
      */
     private EventVO event = null;
     private ArrayList<CommentVO> commentList = new ArrayList<CommentVO>();
+    public static int DATA_VIEW_TYPE_OWN = 1;
+    public static int DATA_VIEW_TYPE_OTHER = 2;
+    private int currentDataViewType = DATA_VIEW_TYPE_OWN;
 
     private void displayEventData(String strEventId) {
         if (strEventId != null && strEventId.length() > 0) {
@@ -74,9 +77,10 @@ public class OpenEventsUI extends javax.swing.JDialog {
         }
     }
 
-    public OpenEventsUI(java.awt.Frame parent, boolean modal, String strEventId) {
+    public OpenEventsUI(java.awt.Frame parent, boolean modal, String strEventId,int dataViewType) {
         super(parent, modal);
         initComponents();
+        currentDataViewType=dataViewType;
         displayEventData(strEventId);
 
         adContentTxt.setEditable(false);
@@ -88,8 +92,15 @@ public class OpenEventsUI extends javax.swing.JDialog {
         timeSlotTxt.setEditable(false);
         numberOfMembersTxt.setEditable(false);
         if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
-            joinEditBtn.setText("Edit");
-            reviewDeleteBtn.setText("delete");
+            if (currentDataViewType == DATA_VIEW_TYPE_OWN) {
+                joinEditBtn.setText("Edit");
+                reviewDeleteBtn.setText("delete");
+            } else if (currentDataViewType == DATA_VIEW_TYPE_OTHER) {
+                joinEditBtn.setVisible(false);
+                reviewDeleteBtn.setVisible(false);
+                manageMembersBtn.setVisible(false);
+            }
+
         }
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
             manageMembersBtn.setVisible(false);
@@ -110,6 +121,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
                 joinEditBtn.setVisible(false);
 //                joinEditBtn.setText("joined");
             }
+
             manageMembersBtn.remove(manageMembersBtn);
 
         }
@@ -493,7 +505,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void manageMembersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageMembersBtnActionPerformed
-        membersManagementUI mmFrm = new membersManagementUI(null, true,event.eventId);
+        membersManagementUI mmFrm = new membersManagementUI(null, true, event.eventId);
         mmFrm.setVisible(true);
     }//GEN-LAST:event_manageMembersBtnActionPerformed
 

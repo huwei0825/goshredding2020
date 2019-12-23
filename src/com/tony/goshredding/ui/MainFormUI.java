@@ -83,7 +83,7 @@ public class MainFormUI extends javax.swing.JFrame {
                     int row = eventTable.getSelectedRow();
                     EventVO event = (EventVO) eventTable.getValueAt(row, 0);
                     if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
-                        OpenEventsUI oeFrm = new OpenEventsUI(null,true,event);
+                        OpenEventsUI oeFrm = new OpenEventsUI(null,true,event.eventId,OpenEventsUI.DATA_VIEW_TYPE_OTHER);
                         oeFrm.setVisible(true);
                     }
 
