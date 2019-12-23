@@ -359,8 +359,7 @@ public class myProfileUI extends  javax.swing.JDialog {
     }//GEN-LAST:event_backBtn1ActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        MainFormUI mainFrm = new MainFormUI();
-        mainFrm.setVisible(true);
+
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
