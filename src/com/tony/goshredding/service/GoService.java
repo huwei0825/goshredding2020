@@ -42,7 +42,21 @@ public class GoService extends SqliteHelper {
 
         return new GoService(DB_NAME);
     }
-
+    public HashMap getEventIdAndMemberCount() throws Exception {
+        HashMap eventMemberMap=new HashMap();
+        try {
+            resultSet = this.getStatement().executeQuery("select count(ParticipantID) as memberCount,EventID from participant_event_table group by EventID ");
+            while (resultSet.next()) {
+                
+                String memberCount = resultSet.getString("memberCount");
+                String EventID = resultSet.getString("EventID");
+                eventMemberMap.put(EventID,memberCount);
+            }
+        } finally {
+            this.destroyed();
+        }
+        return eventMemberMap;
+    }
     public ArrayList<EventVO> getEventAll() throws Exception {
         ArrayList<EventVO> rsList = new ArrayList<EventVO>();
         try {

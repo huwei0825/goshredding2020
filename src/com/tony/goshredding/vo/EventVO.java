@@ -24,4 +24,5 @@ public class EventVO {
     public String introduction;
     public String organizerId;
     public String advertisementId;
+    public String memberCount;
 }
