@@ -134,7 +134,6 @@ public class OpenEventsUI extends javax.swing.JDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
 
     }
 
@@ -515,6 +514,28 @@ public class OpenEventsUI extends javax.swing.JDialog {
             CommentTableModel commentTableModel = new CommentTableModel(commentList);
             commentTable.setModel(commentTableModel);
             //refresh the comment table end.
+        } else if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
+            int row = commentTable.getSelectedRow();
+            if (row < 0) {
+                JOptionPane.showMessageDialog(null, "Please select a comment first");
+            } else {
+                CommentVO commentVO = (CommentVO) commentList.get(row);
+                int delete = JOptionPane.showConfirmDialog(null, "Are you sure want to delete?");
+
+                if (delete == JOptionPane.YES_OPTION) {
+                    try {
+                        GoService.getInstance().deleteComment(commentVO.CommentID);
+                        //refresh comment data.
+                        commentList = GoService.getInstance().getCommentsByEventId(event.eventId);
+                        CommentTableModel commentTableModel = new CommentTableModel(commentList);
+                        commentTable.setModel(commentTableModel);
+                        commentTable.repaint();
+                    } catch (Exception e) {
+
+                    }
+                }
+
+            }
         }
     }//GEN-LAST:event_reviewDeleteBtnActionPerformed
 
@@ -529,7 +550,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
             ei.currentUseType = EventInformationUI.USER_TYPE_EDIT;
             ei.setEvent(event);
             ei.setVisible(true);
-            
+
             displayEventData(event.eventId);//refresh data.
         }
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
