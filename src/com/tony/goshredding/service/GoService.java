@@ -92,12 +92,11 @@ public class GoService extends SqliteHelper {
         return rsList;
     }
 
-    public ArrayList<EventVO> getOtherEventByOrganizerId(String userId) throws Exception {
-        ArrayList<EventVO> rsList = new ArrayList<EventVO>();
+    public EventVO getEventByEventId(String eventId) throws Exception {
+        EventVO event = new EventVO();
         try {
-            resultSet = this.getStatement().executeQuery("select * from event_table where OrganizerID <> '" + Integer.parseInt(userId) + "'");
+            resultSet = this.getStatement().executeQuery("select * from event_table where EventID='" + eventId + "'");
             while (resultSet.next()) {
-                EventVO event = new EventVO();
                 event.eventId = resultSet.getString("EventID");
                 event.eventName = resultSet.getString("EventName");
                 event.eventPicName = resultSet.getString("ImageName");
@@ -109,12 +108,12 @@ public class GoService extends SqliteHelper {
                 event.location = resultSet.getString("Location");
                 event.organizerId = resultSet.getString("OrganizerID");
                 event.advertisementId = resultSet.getString("AdvertisementID");
-                rsList.add(event);
+
             }
         } finally {
             this.destroyed();
         }
-        return rsList;
+        return event;
     }
 
     public ArrayList<CommentVO> getCommentsByEventId(String eventId) throws Exception {
@@ -286,6 +285,26 @@ public class GoService extends SqliteHelper {
     public void deleteAdvertisement(String advertisementID) throws Exception {
         this.executeUpdate("delete from advertisement_table where AdvertisementID='" + advertisementID + "'");
     }
+
+    public AdvertisementVO getAdvertisementById(String advertisementId) throws Exception {
+        AdvertisementVO advertisementVO = new AdvertisementVO();
+        try {
+            resultSet = this.getStatement().executeQuery("select * from advertisement_table where AdvertisementID='" + advertisementId + "'");
+            while (resultSet.next()) {
+                advertisementVO.AdvertisementID = resultSet.getString("AdvertisementID");
+                advertisementVO.AdvertisementName = resultSet.getString("AdvertisementName");
+                advertisementVO.Supplier = resultSet.getString("Supplier");
+                advertisementVO.Content = resultSet.getString("Content");
+                advertisementVO.PricePerPerson = resultSet.getString("PricePerPerson");
+                advertisementVO.ImageName = resultSet.getString("ImageName");
+                advertisementVO.OrganizerID = resultSet.getString("OrganizerID");
+            }
+        } finally {
+            this.destroyed();
+        }
+        return advertisementVO;
+    }
+
     public ArrayList<AdvertisementVO> getAdvertisementsByParticipantId(String userId) throws Exception {
         ArrayList<AdvertisementVO> rsList = new ArrayList<AdvertisementVO>();
         try {
@@ -307,6 +326,7 @@ public class GoService extends SqliteHelper {
         }
         return rsList;
     }
+
     public void addComment(CommentVO commentVO) throws Exception {
         String strNewId = getNextMaxID("comment_table", "CommentID");
         Map<String, Object> map = new HashMap<String, Object>();
@@ -354,14 +374,66 @@ public class GoService extends SqliteHelper {
 
     }
 
+    public ArrayList<EventVO> getOtherEventByOrganizerId(String userId) throws Exception {
+        ArrayList<EventVO> rsList = new ArrayList<EventVO>();
+        try {
+            resultSet = this.getStatement().executeQuery("select * from event_table where OrganizerID <> '" + Integer.parseInt(userId) + "'");
+            while (resultSet.next()) {
+                EventVO event = new EventVO();
+                event.eventId = resultSet.getString("EventID");
+                event.eventName = resultSet.getString("EventName");
+                event.eventPicName = resultSet.getString("ImageName");
+                event.eventTime = resultSet.getString("Time");
+                event.eventDate = resultSet.getString("Date");
+                event.eventType = resultSet.getString("EventType");
+                event.eventTypePicName = resultSet.getString("EventTypeImageName");
+                event.introduction = resultSet.getString("EventIntroduction");
+                event.location = resultSet.getString("Location");
+                event.organizerId = resultSet.getString("OrganizerID");
+                event.advertisementId = resultSet.getString("AdvertisementID");
+                rsList.add(event);
+            }
+        } finally {
+            this.destroyed();
+        }
+        return rsList;
+    }
+
     public void updateEvent(EventVO eventVO) throws Exception {
         StringBuffer updSql = new StringBuffer();
         updSql.append("UPDATE ");
         updSql.append("event_table");
         updSql.append(" SET ");
-        updSql.append(" event_name = '");
+        updSql.append(" OrganizerID = '");
+        updSql.append(eventVO.organizerId);
+        updSql.append("',");
+        updSql.append(" Location = '");
+        updSql.append(eventVO.location);
+        updSql.append("',");
+        updSql.append(" Date = '");
+        updSql.append(eventVO.eventDate);
+        updSql.append("',");
+        updSql.append(" Time = '");
+        updSql.append(eventVO.eventTime);
+        updSql.append("',");
+        updSql.append(" EventType = '");
+        updSql.append(eventVO.eventType);
+        updSql.append("',");
+        updSql.append(" EventName = '");
         updSql.append(eventVO.eventName);
-        updSql.append("' WHERE event_id='");
+        updSql.append("',");
+        updSql.append(" EventIntroduction = '");
+        updSql.append(eventVO.introduction);
+        updSql.append("',");
+        updSql.append(" AdvertisementID = '");
+        updSql.append(eventVO.advertisementId);
+        updSql.append("',");
+        updSql.append(" ImageName = '");
+        updSql.append(eventVO.eventPicName);
+        updSql.append("',");
+        updSql.append(" EventTypeImageName = '");
+        updSql.append(eventVO.eventTypePicName);
+        updSql.append("' WHERE EventID='");
         updSql.append(eventVO.eventId);
         updSql.append("'");
 

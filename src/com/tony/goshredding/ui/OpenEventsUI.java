@@ -6,6 +6,7 @@
 package com.tony.goshredding.ui;
 
 import com.tony.goshredding.service.GoService;
+import com.tony.goshredding.vo.AdvertisementVO;
 import com.tony.goshredding.vo.CommentVO;
 import com.tony.goshredding.vo.EventVO;
 import com.tony.goshredding.vo.ParticipantVO;
@@ -24,50 +25,61 @@ public class OpenEventsUI extends javax.swing.JDialog {
     /**
      * Creates new form Login
      */
-    EventVO event = null;
-    ArrayList<CommentVO> commentList = new ArrayList<CommentVO>();
+    private EventVO event = null;
+    private ArrayList<CommentVO> commentList = new ArrayList<CommentVO>();
 
-    public OpenEventsUI(java.awt.Frame parent, boolean modal, EventVO eventvo) {
-        super(parent, modal);
-        initComponents();
-
-        event = eventvo;
-        String time = null;
-        String timeSlot = null;
-        eventNameLbl.setText(event.eventName);
-
-        dateTxt.setText(event.eventDate);
-        locationTxt.setText(event.location);
-        typeTxt.setText(event.eventType);
-        introductionTxt.setText(event.introduction);
-        //converts between 12 hours system and 24 hours system
-        String[] timeArray = event.eventTime.split(":");
-        int hours = Integer.parseInt(timeArray[0]);
-        String minutes = timeArray[1];
-        if (hours >= 0 && hours <= 11) {
-            time = event.eventTime;
-            timeSlot = "AM";
-        } else if (hours >= 12 && hours <= 23) {
-            time = String.valueOf(hours - 12) + ":" + minutes;
-            timeSlot = "PM";
-        }
-        timeTxt.setText(time);
-        timeSlotTxt.setText("    " + timeSlot);
-        if (event.eventPicName != null && event.eventPicName.length() > 0) {
-
+    private void displayEventData(String strEventId) {
+        if (strEventId != null && strEventId.length() > 0) {
             try {
-                File directory = new File("");
-                String filePath = directory.getCanonicalPath() + "/images/" + event.eventPicName;
-                File targetFile = new File(filePath);
-                Image image = new ImageIcon(targetFile.getAbsolutePath()).getImage();
-                image = image.getScaledInstance(310, 180, Image.SCALE_SMOOTH);
-                imageLbl.setIcon(new ImageIcon(image));
+
+                event = GoService.getInstance().getEventByEventId(strEventId);
+                String time = null;
+                String timeSlot = null;
+                eventNameLbl.setText(event.eventName);
+
+                dateTxt.setText(event.eventDate);
+                locationTxt.setText(event.location);
+                typeTxt.setText(event.eventType);
+                introductionTxt.setText(event.introduction);
+                //converts between 12 hours system and 24 hours system
+                String[] timeArray = event.eventTime.split(":");
+                int hours = Integer.parseInt(timeArray[0]);
+                String minutes = timeArray[1];
+                if (hours >= 0 && hours <= 11) {
+                    time = event.eventTime;
+                    timeSlot = "AM";
+                } else if (hours >= 12 && hours <= 23) {
+                    time = String.valueOf(hours - 12) + ":" + minutes;
+                    timeSlot = "PM";
+                }
+                timeTxt.setText(time);
+                timeSlotTxt.setText("    " + timeSlot);
+                if (event.eventPicName != null && event.eventPicName.length() > 0) {
+
+                    try {
+                        File directory = new File("");
+                        String filePath = directory.getCanonicalPath() + "/images/" + event.eventPicName;
+                        File targetFile = new File(filePath);
+                        Image image = new ImageIcon(targetFile.getAbsolutePath()).getImage();
+                        image = image.getScaledInstance(310, 180, Image.SCALE_SMOOTH);
+                        imageLbl.setIcon(new ImageIcon(image));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            displayAdvertisement(event.advertisementId);
         }
+    }
 
-        adTxt.setEditable(false);
+    public OpenEventsUI(java.awt.Frame parent, boolean modal, String strEventId) {
+        super(parent, modal);
+        initComponents();
+        displayEventData(strEventId);
+
+        adContentTxt.setEditable(false);
         dateTxt.setEditable(false);
         locationTxt.setEditable(false);
         typeTxt.setEditable(false);
@@ -122,6 +134,37 @@ public class OpenEventsUI extends javax.swing.JDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+
+    }
+
+    private void displayAdvertisement(String advertisementID) {
+        if (advertisementID != null && advertisementID.length() > 0) {
+            try {
+
+                AdvertisementVO advertisementVO = GoService.getInstance().getAdvertisementById(advertisementID);
+//                adNameTxt.setText(advertisementVO.AdvertisementName);
+//                adSupplierTxt.setText(advertisementVO.Supplier);
+                adContentTxt.setText(advertisementVO.Content);
+//                adPriceTxt.setText(advertisementVO.PricePerPerson);
+                if (advertisementVO.ImageName != null && advertisementVO.ImageName.length() > 0) {
+
+                    try {
+                        File directory = new File("");
+                        String filePath = directory.getCanonicalPath() + "/images/" + advertisementVO.ImageName;
+                        File targetFile = new File(filePath);
+                        Image image = new ImageIcon(targetFile.getAbsolutePath()).getImage();
+                        image = image.getScaledInstance(155, 90, Image.SCALE_SMOOTH);
+                        advertisementImageLabel.setIcon(new ImageIcon(image));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     /**
@@ -136,9 +179,9 @@ public class OpenEventsUI extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        adTxt = new javax.swing.JTextArea();
+        adContentTxt = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        advertisementImageLabel = new javax.swing.JLabel();
         eventNameLbl = new javax.swing.JLabel();
         numberOfMembersTxt = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -177,24 +220,24 @@ public class OpenEventsUI extends javax.swing.JDialog {
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        adTxt.setColumns(20);
-        adTxt.setRows(5);
-        adTxt.setFocusTraversalPolicyProvider(true);
-        adTxt.setPreferredSize(new java.awt.Dimension(240, 82));
-        jScrollPane1.setViewportView(adTxt);
+        adContentTxt.setColumns(20);
+        adContentTxt.setRows(5);
+        adContentTxt.setFocusTraversalPolicyProvider(true);
+        adContentTxt.setPreferredSize(new java.awt.Dimension(240, 82));
+        jScrollPane1.setViewportView(adContentTxt);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 15)); // NOI18N
         jLabel1.setText("Ad contents:");
 
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/tony/goshredding/files/giantBike.png"))); // NOI18N
-        jLabel13.setPreferredSize(new java.awt.Dimension(270, 75));
+        advertisementImageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/tony/goshredding/files/giantBike.png"))); // NOI18N
+        advertisementImageLabel.setPreferredSize(new java.awt.Dimension(270, 75));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(advertisementImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -204,7 +247,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(advertisementImageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(jLabel1))
@@ -243,7 +286,6 @@ public class OpenEventsUI extends javax.swing.JDialog {
         reviewDeleteBtn.setBackground(new java.awt.Color(72, 124, 175));
         reviewDeleteBtn.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
         reviewDeleteBtn.setText("Write a comment");
-        reviewDeleteBtn.setActionCommand("Write a comment");
         reviewDeleteBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reviewDeleteBtnActionPerformed(evt);
@@ -369,7 +411,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 18, Short.MAX_VALUE))
+                .addGap(0, 20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -444,7 +486,7 @@ public class OpenEventsUI extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 493, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
         );
 
         pack();
@@ -483,9 +525,12 @@ public class OpenEventsUI extends javax.swing.JDialog {
 
     private void joinEditBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joinEditBtnActionPerformed
         if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
-//            EventInformationUI ei = new EventInformationUI();
-//            ei.setVisible(true);
-//            this.dispose();
+            EventInformationUI ei = new EventInformationUI(null, true);
+            ei.currentUseType = EventInformationUI.USER_TYPE_EDIT;
+            ei.setEvent(event);
+            ei.setVisible(true);
+            
+            displayEventData(event.eventId);//refresh data.
         }
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
             try {
@@ -567,7 +612,8 @@ public class OpenEventsUI extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea adTxt;
+    private javax.swing.JTextArea adContentTxt;
+    private javax.swing.JLabel advertisementImageLabel;
     private javax.swing.JButton backBtn;
     private javax.swing.JTable commentTable;
     private javax.swing.JTextField dateTxt;
@@ -577,7 +623,6 @@ public class OpenEventsUI extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

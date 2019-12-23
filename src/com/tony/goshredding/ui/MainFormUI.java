@@ -345,8 +345,9 @@ public class MainFormUI extends javax.swing.JFrame {
     private void notificationNewGroupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notificationNewGroupBtnActionPerformed
         if (GoService.currentUserType ==GoService.USER_TYPE_ORGANIZER) {
             EventInformationUI eiFrm = new EventInformationUI(null,true);
+            eiFrm.currentUseType=EventInformationUI.USER_TYPE_NEW;
             eiFrm.setVisible(true);
-        } else {
+        } else  if (GoService.currentUserType ==GoService.USER_TYPE_PARTICIPANT){
             NotificationCentreUI ncFrm = new NotificationCentreUI(this,true);
             ncFrm.setVisible(true);
 

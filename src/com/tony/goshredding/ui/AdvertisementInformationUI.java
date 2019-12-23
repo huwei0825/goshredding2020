@@ -19,10 +19,12 @@ public class AdvertisementInformationUI extends javax.swing.JDialog {
     private String strImageName = "";//the current select advertisement picture.
     public static int OPEN_TYPE_NEW = 1;//used to create a new advertisement.
     public static int OPEN_TYPE_EDIT = 2;//used to edit a existing advertisement.
-
-    public AdvertisementInformationUI(java.awt.Frame parent, boolean modal) {
+    private int currentUserType=1;
+    public AdvertisementInformationUI(java.awt.Frame parent, boolean modal,int openType) {
         super(parent, modal);
+        currentUserType=openType;
         initComponents();
+        
     }
 
     /**
@@ -313,14 +315,14 @@ public class AdvertisementInformationUI extends javax.swing.JDialog {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AdvertisementInformationUI dialog = new AdvertisementInformationUI(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+//                AdvertisementInformationUI dialog = new AdvertisementInformationUI(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                    @Override
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
             }
         });
     }

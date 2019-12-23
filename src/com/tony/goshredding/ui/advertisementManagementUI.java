@@ -9,6 +9,7 @@ import com.tony.goshredding.service.GoService;
 import com.tony.goshredding.vo.AdvertisementVO;
 import com.tony.goshredding.vo.EventVO;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -26,6 +27,10 @@ public class advertisementManagementUI extends javax.swing.JDialog {
     public static int USE_TYPE_MANAGE = 1;
     ArrayList<AdvertisementVO> advertisementList = new ArrayList<AdvertisementVO>();
     ArrayList<AdvertisementVO> advertisementListOriginal = new ArrayList<AdvertisementVO>();
+    public String selectedAdvertisementId;
+    public static int RETURN_TYPE_CHOOSE = 0;
+    public static int RETURN_TYPE_BACK = 1;
+    public int returnType = RETURN_TYPE_BACK;
 
     public advertisementManagementUI(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -136,6 +141,11 @@ public class advertisementManagementUI extends javax.swing.JDialog {
 
         deleteBtn.setBackground(new java.awt.Color(72, 124, 175));
         deleteBtn.setText("Delete");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteBtnActionPerformed(evt);
+            }
+        });
 
         editBtn.setBackground(new java.awt.Color(72, 124, 175));
         editBtn.setText("Edit");
@@ -231,23 +241,49 @@ public class advertisementManagementUI extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-
+        this.returnType=advertisementManagementUI.RETURN_TYPE_BACK;
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void chooseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseBtnActionPerformed
-
+        int row = advertisementTable.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(null, "Please select an advertisement first");
+        } else {
+            AdvertisementVO advertisementObj = (AdvertisementVO) advertisementList.get(row);
+            this.selectedAdvertisementId = advertisementObj.AdvertisementID;
+            this.returnType=advertisementManagementUI.RETURN_TYPE_CHOOSE;
+        }
         this.dispose();
     }//GEN-LAST:event_chooseBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true);
+        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true, AdvertisementInformationUI.OPEN_TYPE_NEW);
         aiFrm.setVisible(true);
+        try {
+            advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        advertisementList = advertisementListOriginal;
+        initTableData();
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true);
+        AdvertisementInformationUI aiFrm = new AdvertisementInformationUI(null, true, AdvertisementInformationUI.OPEN_TYPE_EDIT);
         aiFrm.setVisible(true);
+        try {
+
+            advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        advertisementList = advertisementListOriginal;
+        initTableData();
     }//GEN-LAST:event_editBtnActionPerformed
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
@@ -261,14 +297,27 @@ public class advertisementManagementUI extends javax.swing.JDialog {
                 advertisementListNew.add(advertisementVO);
             }
         }
-        advertisementList=advertisementListNew;
+        advertisementList = advertisementListNew;
         initTableData();
     }//GEN-LAST:event_searchBtnActionPerformed
 
     private void allBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allBtnActionPerformed
         advertisementList = advertisementListOriginal;
-        initTableData() ;
+        initTableData();
     }//GEN-LAST:event_allBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        try {
+
+            advertisementListOriginal = GoService.getInstance().getAdvertisementsByParticipantId(GoService.currentUserId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        advertisementList = advertisementListOriginal;
+        initTableData();
+    }//GEN-LAST:event_deleteBtnActionPerformed
 
     /**
      * @param args the command line arguments

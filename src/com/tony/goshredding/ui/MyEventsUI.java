@@ -289,7 +289,7 @@ public class MyEventsUI extends javax.swing.JDialog {
         } else {
             EventVO event = (EventVO) eventList.get(row);
             if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
-                OpenEventsUI oeFrm = new OpenEventsUI(null, true, event);
+                OpenEventsUI oeFrm = new OpenEventsUI(null, true, event.eventId);
                 oeFrm.setVisible(true);
             }
         }

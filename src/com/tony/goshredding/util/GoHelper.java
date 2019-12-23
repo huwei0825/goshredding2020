@@ -72,7 +72,19 @@ public class GoHelper {
 
         return day + ":" + hour + ":" + min + ":" + sec;
     }
-
+    public static String getEventTypeImageName(String strEventType){
+        if(strEventType.equalsIgnoreCase(Definition.EVENT_TYPE_BIKE)){
+            return Definition.EVENT_TYPE_IMAGE_BIKE;
+            
+        }else if(strEventType.equalsIgnoreCase(Definition.EVENT_TYPE_SKATE_BOARD)){
+            return Definition.EVENT_TYPE_IMAGE_SKATE_BOARD;
+            
+        }else if(strEventType.equalsIgnoreCase(Definition.EVENT_TYPE_SNOW_BOARD)){
+            return Definition.EVENT_TYPE_IMAGE_SNOW_BOARD;
+            
+        }else
+            return "";
+    }
     public static void copyFile(File source, File dest)
             throws IOException {
         InputStream input = null;

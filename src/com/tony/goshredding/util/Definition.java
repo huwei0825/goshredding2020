@@ -12,13 +12,13 @@ import javax.swing.JTable;
  * @author huwei
  */
 public class Definition {
-    public final static String PARTICIPANTFILE = "ParticipantFile.txt";
-    public final static String ORGANIZERFILE = "OrganizerFile.txt";
-    public final static String EVENTFILE = "EventFile.txt";
-    public final static String DB_FILE_NAME="";
-    
-    
-    
-    
-}
 
+    public final static String DB_FILE_NAME = "";
+    public final static String EVENT_TYPE_BIKE = "biking";
+    public final static String EVENT_TYPE_SKATE_BOARD = "skateboarding";
+    public final static String EVENT_TYPE_SNOW_BOARD = "snowboarding";
+    
+    public final static String EVENT_TYPE_IMAGE_BIKE = "bike.png";
+    public final static String EVENT_TYPE_IMAGE_SKATE_BOARD = "skateboard.png";
+    public final static String EVENT_TYPE_IMAGE_SNOW_BOARD = "snowboard.png";
+}
