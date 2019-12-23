@@ -10,7 +10,7 @@ import com.tony.goshredding.vo.EventVO;
 import com.tony.goshredding.ui.MyEventsUI;
 import com.tony.goshredding.ui.NotificationCentreUI;
 import com.tony.goshredding.ui.OpenEventsUI;
-import com.tony.goshredding.ui.myProfileUI;
+import com.tony.goshredding.ui.MyProfileUI;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
@@ -337,8 +337,8 @@ public class MainFormUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void advertiseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_advertiseBtnActionPerformed
-        advertisementManagementUI myFrm = new advertisementManagementUI(this,true);
-        myFrm.setUseType(advertisementManagementUI.USE_TYPE_MANAGE);
+        AdvertisementManagementUI myFrm = new AdvertisementManagementUI(this,true);
+        myFrm.setUseType(AdvertisementManagementUI.USE_TYPE_MANAGE);
         myFrm.setVisible(true);
     }//GEN-LAST:event_advertiseBtnActionPerformed
 
@@ -365,7 +365,7 @@ public class MainFormUI extends javax.swing.JFrame {
 
     private void myProfileLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myProfileLblMouseClicked
         // TODO add your handling code here:
-        myProfileUI mpFrm = new myProfileUI(null,true);
+        MyProfileUI mpFrm = new MyProfileUI(null,true);
         mpFrm.setVisible(true);
     }//GEN-LAST:event_myProfileLblMouseClicked
 

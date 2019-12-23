@@ -10,7 +10,7 @@ import com.tony.goshredding.ui.MainFormUI;
 import com.tony.goshredding.ui.MyEventsUI;
 import com.tony.goshredding.ui.PictureViewPanel;
 import com.tony.goshredding.ui.OpenEventsUI;
-import com.tony.goshredding.ui.advertisementManagementUI;
+import com.tony.goshredding.ui.AdvertisementManagementUI;
 import com.tony.goshredding.util.GoHelper;
 import com.tony.goshredding.vo.EventVO;
 import java.awt.Dimension;
@@ -439,8 +439,8 @@ public class EventInformationUI extends javax.swing.JDialog {
     }//GEN-LAST:event_saveBtnActionPerformed
 
     private void changeAdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeAdBtnActionPerformed
-        advertisementManagementUI amFrm = new advertisementManagementUI(null,true);
-        amFrm.setUseType(advertisementManagementUI.USE_TYPE_CHOOSE);
+        AdvertisementManagementUI amFrm = new AdvertisementManagementUI(null,true);
+        amFrm.setUseType(AdvertisementManagementUI.USE_TYPE_CHOOSE);
         amFrm.setVisible(true);
     }//GEN-LAST:event_changeAdBtnActionPerformed
 
