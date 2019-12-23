@@ -33,7 +33,7 @@ public class MainFormUI extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-//    ArrayList<EventVO> eventListOriginal = new ArrayList<EventVO>();
+    ArrayList<EventVO> eventListOriginal = new ArrayList<EventVO>();
     ArrayList<EventVO> recommandEventList = new ArrayList<EventVO>();
 
     public MainFormUI() {
@@ -52,31 +52,27 @@ public class MainFormUI extends javax.swing.JFrame {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setPreferredSize(new Dimension(0, 0));
         eventTable.getTableHeader().setDefaultRenderer(renderer);
+
         if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
             try {
-                recommandEventList = GoService.getInstance().getUnjoinedEventsByParticipantId(GoService.currentUserId);
+                eventListOriginal = GoService.getInstance().getUnjoinedEventsByParticipantId(GoService.currentUserId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
             try {
-                recommandEventList = GoService.getInstance().getOtherEventByOrganizerId(GoService.currentUserId);
+                eventListOriginal = GoService.getInstance().getOtherEventByOrganizerId(GoService.currentUserId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        if (recommandEventList.size() == 0) {
+        if (eventListOriginal.size() == 0) {
             EventVO event = new EventVO();
             event.eventName = "You have no events yet";
-            recommandEventList.add(event);
+            eventListOriginal.add(event);
         }
-
-        EventTableModel eventTableModel = new EventTableModel(recommandEventList);
-        eventTable.setModel(eventTableModel);
-        TableColumnModel tcm = eventTable.getColumnModel();
-        TableColumn tc = tcm.getColumn(0);
-        tc.setPreferredWidth(200);
-        tc.setCellRenderer(new EventCellRender());
+        recommandEventList = eventListOriginal;
+        initTableData();
 
         //double click events
         eventTable.addMouseListener(new MouseAdapter() {
@@ -99,10 +95,20 @@ public class MainFormUI extends javax.swing.JFrame {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy K:m a");
         String dateString = formatter.format(currentTime);
         dateTxt.setText(dateString);
-        
+
         //display the greeting.
-        greetingTxt.setText("Hello "+GoService.currentUserName);
-        
+        greetingTxt.setText("Hello " + GoService.currentUserName);
+
+    }
+
+    public void initTableData() {
+        EventTableModel eventTableModel = new EventTableModel(recommandEventList);
+        eventTable.setModel(eventTableModel);
+        TableColumnModel tcm = eventTable.getColumnModel();
+        TableColumn tc = tcm.getColumn(0);
+        tc.setPreferredWidth(200);
+        tc.setCellRenderer(new EventCellRender());
+        eventTable.repaint();
     }
 
     class MyMouseAdapter extends java.awt.event.MouseAdapter {
@@ -141,7 +147,7 @@ public class MainFormUI extends javax.swing.JFrame {
         dateTxt = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         titleLbl = new javax.swing.JLabel();
-        searchBtn1 = new javax.swing.JButton();
+        searchBtn = new javax.swing.JButton();
         filterComboBox = new javax.swing.JComboBox<>();
         jScrollPane4 = new javax.swing.JScrollPane();
         eventTable = new javax.swing.JTable();
@@ -190,32 +196,32 @@ public class MainFormUI extends javax.swing.JFrame {
         greetingTxt.setForeground(new java.awt.Color(68, 114, 196));
         greetingTxt.setText("Good morning, Tony");
         jPanel.add(greetingTxt);
-        greetingTxt.setBounds(470, 20, 140, 16);
+        greetingTxt.setBounds(470, 20, 140, 15);
 
         dateTxt.setForeground(new java.awt.Color(68, 114, 196));
         dateTxt.setText("dd/mm/yyyy 9:00 AM");
         jPanel.add(dateTxt);
-        dateTxt.setBounds(620, 20, 138, 16);
+        dateTxt.setBounds(620, 20, 108, 15);
 
         jLabel3.setForeground(new java.awt.Color(68, 114, 196));
         jLabel3.setText("\"Do want you can't\" --- Casey Neistat");
         jPanel.add(jLabel3);
-        jLabel3.setBounds(30, 20, 320, 16);
+        jLabel3.setBounds(30, 20, 320, 15);
 
         titleLbl.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         titleLbl.setText("Find your next event");
         jPanel.add(titleLbl);
-        titleLbl.setBounds(30, 40, 330, 30);
+        titleLbl.setBounds(30, 40, 330, 34);
 
-        searchBtn1.setBackground(new java.awt.Color(72, 124, 175));
-        searchBtn1.setText("search");
-        searchBtn1.addActionListener(new java.awt.event.ActionListener() {
+        searchBtn.setBackground(new java.awt.Color(72, 124, 175));
+        searchBtn.setText("search");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchBtn1ActionPerformed(evt);
+                searchBtnActionPerformed(evt);
             }
         });
-        jPanel.add(searchBtn1);
-        searchBtn1.setBounds(200, 83, 85, 35);
+        jPanel.add(searchBtn);
+        searchBtn.setBounds(200, 83, 69, 35);
 
         filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All types", "biking", "skateboarding", "snowboarding", " ", " " }));
         filterComboBox.setToolTipText("");
@@ -224,13 +230,8 @@ public class MainFormUI extends javax.swing.JFrame {
                 filterComboBoxItemStateChanged(evt);
             }
         });
-        filterComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                filterComboBoxActionPerformed(evt);
-            }
-        });
         jPanel.add(filterComboBox);
-        filterComboBox.setBounds(510, 83, 146, 35);
+        filterComboBox.setBounds(510, 83, 104, 35);
 
         eventTable.setBackground(new java.awt.Color(239, 246, 254));
         eventTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -366,96 +367,74 @@ public class MainFormUI extends javax.swing.JFrame {
     }//GEN-LAST:event_notificationNewGroupBtnActionPerformed
 
     private void myEventBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myEventBtnActionPerformed
-        // TODO add your handling code here:
+
         MyEventsUI myFrm = new MyEventsUI(null, true);
         myFrm.setVisible(true);
     }//GEN-LAST:event_myEventBtnActionPerformed
 
     private void searchTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchTxtActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_searchTxtActionPerformed
 
     private void myProfileLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myProfileLblMouseClicked
-        // TODO add your handling code here:
+
         myProfileUI mpFrm = new myProfileUI(null, true);
         mpFrm.setVisible(true);
     }//GEN-LAST:event_myProfileLblMouseClicked
 
     private void filterComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterComboBoxItemStateChanged
-        // TODO add your handling code here:
+
         ArrayList<EventVO> eventListNew = new ArrayList<EventVO>();
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-            if (filterComboBox.getSelectedIndex() == 0) {
-                try {
-                    ArrayList<EventVO> temp = GoService.getInstance().getOtherEventByOrganizerId(GoService.currentUserId);
-                    eventListNew = GoService.getInstance().bubbleSortEventByTime(temp);
-
-                } catch (Exception e) {
-
-                }
-                EventTableModel eventTableModel = new EventTableModel(eventListNew);
-                eventTable.setModel(eventTableModel);
-                TableColumnModel tcm2 = eventTable.getColumnModel();
-                TableColumn tc2 = tcm2.getColumn(0);
-                tc2.setPreferredWidth(200);
-                tc2.setCellRenderer(new EventCellRender());
-            } else if (filterComboBox.getSelectedIndex() == 2) {
-                for (int i = 0; i < recommandEventList.size(); i++) {
+            if (filterComboBox.getSelectedIndex() == 0) {//ALL
+                recommandEventList = eventListOriginal;
+                initTableData();
+            } else if (filterComboBox.getSelectedIndex() == 1) {
+                for (int i = 0; i < eventListOriginal.size(); i++) {
                     EventVO event = new EventVO();
-                    event = (EventVO) recommandEventList.get(i);
+                    event = (EventVO) eventListOriginal.get(i);
                     if (event.eventType.equalsIgnoreCase("biking")) {
                         eventListNew.add(event);
                     }
                 }
-                EventTableModel eventTableModel = new EventTableModel(eventListNew);
-                eventTable.setModel(eventTableModel);
-                TableColumnModel tcm2 = eventTable.getColumnModel();
-                TableColumn tc2 = tcm2.getColumn(0);
-                tc2.setPreferredWidth(200);
-                tc2.setCellRenderer(new EventCellRender());
-            } else if (filterComboBox.getSelectedIndex() == 3) {
-                for (int i = 0; i < recommandEventList.size(); i++) {
+                recommandEventList = eventListNew;
+                initTableData();
+            } else if (filterComboBox.getSelectedIndex() == 2) {
+                for (int i = 0; i < eventListOriginal.size(); i++) {
                     EventVO event = new EventVO();
-                    event = (EventVO) recommandEventList.get(i);
+                    event = (EventVO) eventListOriginal.get(i);
                     if (event.eventType.equalsIgnoreCase("skateboarding")) {
                         eventListNew.add(event);
                     }
                 }
-                EventTableModel eventTableModel = new EventTableModel(eventListNew);
-                eventTable.setModel(eventTableModel);
-                TableColumnModel tcm2 = eventTable.getColumnModel();
-                TableColumn tc2 = tcm2.getColumn(0);
-                tc2.setPreferredWidth(200);
-                tc2.setCellRenderer(new EventCellRender());
-            } else if (filterComboBox.getSelectedIndex() == 4) {
-                for (int i = 0; i < recommandEventList.size(); i++) {
+                recommandEventList = eventListNew;
+                initTableData();
+            } else if (filterComboBox.getSelectedIndex() == 3) {
+                for (int i = 0; i < eventListOriginal.size(); i++) {
                     EventVO event = new EventVO();
-                    event = (EventVO) recommandEventList.get(i);
+                    event = (EventVO) eventListOriginal.get(i);
                     if (event.eventType.equalsIgnoreCase("snowboarding")) {
                         eventListNew.add(event);
                     }
                 }
-                EventTableModel eventTableModel = new EventTableModel(eventListNew);
-                eventTable.setModel(eventTableModel);
-                TableColumnModel tcm2 = eventTable.getColumnModel();
-                TableColumn tc2 = tcm2.getColumn(0);
-                tc2.setPreferredWidth(200);
-                tc2.setCellRenderer(new EventCellRender());
+                recommandEventList = eventListNew;
+                initTableData();
             }
             eventTable.repaint();
         }
     }//GEN-LAST:event_filterComboBoxItemStateChanged
 
     private void sortComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_sortComboBoxItemStateChanged
-        // TODO add your handling code here:
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            if (sortComboBox.getSelectedIndex() == 0) {//sort by time.
+
+            } else if (sortComboBox.getSelectedIndex() == 0) {//sort by popularity.
+
+            }
+        }
     }//GEN-LAST:event_sortComboBoxItemStateChanged
 
-    private void filterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterComboBoxActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_filterComboBoxActionPerformed
-
-    private void searchBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtn1ActionPerformed
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
 
         String searchItem = searchTxt.getText();
         ArrayList<EventVO> eventListNew = new ArrayList<EventVO>();
@@ -467,14 +446,9 @@ public class MainFormUI extends javax.swing.JFrame {
                 eventListNew.add(event);
             }
         }
-        EventTableModel eventTableModel = new EventTableModel(eventListNew);
-        eventTable.setModel(eventTableModel);
-        TableColumnModel tcm2 = eventTable.getColumnModel();
-        TableColumn tc2 = tcm2.getColumn(0);
-        tc2.setPreferredWidth(200);
-        tc2.setCellRenderer(new EventCellRender());
-        eventTable.repaint();
-    }//GEN-LAST:event_searchBtn1ActionPerformed
+        recommandEventList = eventListNew;
+        initTableData();
+    }//GEN-LAST:event_searchBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -535,7 +509,7 @@ public class MainFormUI extends javax.swing.JFrame {
     private javax.swing.JButton myEventBtn;
     private javax.swing.JLabel myProfileLbl;
     private javax.swing.JButton notificationNewGroupBtn;
-    private javax.swing.JButton searchBtn1;
+    private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchTxt;
     private javax.swing.JComboBox<String> sortComboBox;
     private javax.swing.JLabel titleLbl;
