@@ -15,7 +15,9 @@ import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -39,7 +41,7 @@ public class MainFormUI extends javax.swing.JFrame {
         if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
             notificationNewGroupBtn.setText("New Event");
             titleLbl.setText("Events By Other Organizers");
-        }else{
+        } else {
             advertiseBtn.setVisible(false);
         }
         myProfileLbl.addMouseListener(new com.tony.goshredding.ui.MainFormUI.MyMouseAdapter(myProfileLbl));
@@ -83,7 +85,7 @@ public class MainFormUI extends javax.swing.JFrame {
                     int row = eventTable.getSelectedRow();
                     EventVO event = (EventVO) eventTable.getValueAt(row, 0);
                     if (!event.eventName.equalsIgnoreCase("You have no events yet")) {
-                        OpenEventsUI oeFrm = new OpenEventsUI(null,true,event.eventId,OpenEventsUI.DATA_VIEW_TYPE_OTHER);
+                        OpenEventsUI oeFrm = new OpenEventsUI(null, true, event.eventId, OpenEventsUI.DATA_VIEW_TYPE_OTHER);
                         oeFrm.setVisible(true);
                     }
 
@@ -92,6 +94,15 @@ public class MainFormUI extends javax.swing.JFrame {
                 }
             }
         });
+        //display current datatime.
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy K:m a");
+        String dateString = formatter.format(currentTime);
+        dateTxt.setText(dateString);
+        
+        //display the greeting.
+        greetingTxt.setText("Hello "+GoService.currentUserName);
+        
     }
 
     class MyMouseAdapter extends java.awt.event.MouseAdapter {
@@ -337,18 +348,18 @@ public class MainFormUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void advertiseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_advertiseBtnActionPerformed
-        advertisementManagementUI myFrm = new advertisementManagementUI(this,true);
+        advertisementManagementUI myFrm = new advertisementManagementUI(this, true);
         myFrm.setUseType(advertisementManagementUI.USE_TYPE_MANAGE);
         myFrm.setVisible(true);
     }//GEN-LAST:event_advertiseBtnActionPerformed
 
     private void notificationNewGroupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notificationNewGroupBtnActionPerformed
-        if (GoService.currentUserType ==GoService.USER_TYPE_ORGANIZER) {
-            EventInformationUI eiFrm = new EventInformationUI(null,true);
-            eiFrm.currentUseType=EventInformationUI.USER_TYPE_NEW;
+        if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
+            EventInformationUI eiFrm = new EventInformationUI(null, true);
+            eiFrm.currentUseType = EventInformationUI.USER_TYPE_NEW;
             eiFrm.setVisible(true);
-        } else  if (GoService.currentUserType ==GoService.USER_TYPE_PARTICIPANT){
-            NotificationCentreUI ncFrm = new NotificationCentreUI(this,true);
+        } else if (GoService.currentUserType == GoService.USER_TYPE_PARTICIPANT) {
+            NotificationCentreUI ncFrm = new NotificationCentreUI(this, true);
             ncFrm.setVisible(true);
 
         }
@@ -356,7 +367,7 @@ public class MainFormUI extends javax.swing.JFrame {
 
     private void myEventBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myEventBtnActionPerformed
         // TODO add your handling code here:
-        MyEventsUI myFrm = new MyEventsUI(null,true);
+        MyEventsUI myFrm = new MyEventsUI(null, true);
         myFrm.setVisible(true);
     }//GEN-LAST:event_myEventBtnActionPerformed
 
@@ -366,7 +377,7 @@ public class MainFormUI extends javax.swing.JFrame {
 
     private void myProfileLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myProfileLblMouseClicked
         // TODO add your handling code here:
-        myProfileUI mpFrm = new myProfileUI(null,true);
+        myProfileUI mpFrm = new myProfileUI(null, true);
         mpFrm.setVisible(true);
     }//GEN-LAST:event_myProfileLblMouseClicked
 
@@ -445,7 +456,7 @@ public class MainFormUI extends javax.swing.JFrame {
     }//GEN-LAST:event_filterComboBoxActionPerformed
 
     private void searchBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtn1ActionPerformed
- 
+
         String searchItem = searchTxt.getText();
         ArrayList<EventVO> eventListNew = new ArrayList<EventVO>();
 

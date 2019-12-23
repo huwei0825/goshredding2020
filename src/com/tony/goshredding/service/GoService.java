@@ -29,6 +29,7 @@ public class GoService extends SqliteHelper {
 
     private static String DB_NAME = "GoshreddingDB.db";
     public static String currentUserId = "";
+    public static String currentUserName = "";
     public static int USER_TYPE_ORGANIZER = 1;
     public static int USER_TYPE_PARTICIPANT = 2;
     public static int currentUserType = 0;

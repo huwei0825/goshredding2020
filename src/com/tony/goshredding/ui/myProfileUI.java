@@ -57,7 +57,7 @@ public class myProfileUI extends  javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        backBtn1 = new javax.swing.JButton();
+        feedbackBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         logoutBtn = new javax.swing.JButton();
@@ -145,15 +145,15 @@ public class myProfileUI extends  javax.swing.JDialog {
         jPanel1.add(jLabel8);
         jLabel8.setBounds(6, 80, 84, 26);
 
-        backBtn1.setBackground(new java.awt.Color(72, 124, 175));
-        backBtn1.setText("Send feedback");
-        backBtn1.addActionListener(new java.awt.event.ActionListener() {
+        feedbackBtn.setBackground(new java.awt.Color(72, 124, 175));
+        feedbackBtn.setText("Send feedback");
+        feedbackBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backBtn1ActionPerformed(evt);
+                feedbackBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(backBtn1);
-        backBtn1.setBounds(230, 225, 120, 35);
+        jPanel1.add(feedbackBtn);
+        feedbackBtn.setBounds(230, 225, 120, 35);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -215,7 +215,7 @@ public class myProfileUI extends  javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanelLayout.createSequentialGroup()
                         .addGap(619, 619, 619)
                         .addComponent(jLabel14)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 145, Short.MAX_VALUE))
                     .addGroup(jPanelLayout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -340,7 +340,7 @@ public class myProfileUI extends  javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 511, Short.MAX_VALUE)
+                .addComponent(jPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -354,9 +354,9 @@ public class myProfileUI extends  javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_logoutBtnActionPerformed
 
-    private void backBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtn1ActionPerformed
+    private void feedbackBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_feedbackBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_backBtn1ActionPerformed
+    }//GEN-LAST:event_feedbackBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
 
@@ -471,10 +471,10 @@ public class myProfileUI extends  javax.swing.JDialog {
     private javax.swing.JLabel add1Lbl;
     private javax.swing.JLabel add2Lbl;
     private javax.swing.JButton backBtn;
-    private javax.swing.JButton backBtn1;
     private javax.swing.JLabel dobLbl;
     private javax.swing.JButton editBtn;
     private javax.swing.JLabel emailLbl;
+    private javax.swing.JButton feedbackBtn;
     private javax.swing.JLabel forenameLbl;
     private javax.swing.JLabel incomeLbl;
     private javax.swing.JComboBox<String> jComboBox1;

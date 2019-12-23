@@ -172,6 +172,7 @@ public class LoginUI extends javax.swing.JFrame {
 
                         if (password.equals(dbPassword)) {
                             GoService.currentUserId = userId;
+                            GoService.currentUserName = organizerObj.username;
                             JOptionPane.showMessageDialog(null, "login sucessful");
                             GoService.currentUserType = GoService.USER_TYPE_ORGANIZER;
                             MainFormUI mainFrm = new MainFormUI();
@@ -189,6 +190,7 @@ public class LoginUI extends javax.swing.JFrame {
 
                     if (password.equals(dbPassword)) {//check the password.
                         GoService.currentUserId = userId;
+                        GoService.currentUserName = participantObj.username;
                         JOptionPane.showMessageDialog(null, "login sucessful");
                         GoService.currentUserType = GoService.USER_TYPE_PARTICIPANT;
                         MainFormUI mainFrm = new MainFormUI();
