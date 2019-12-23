@@ -444,7 +444,7 @@ public class MainFormUI extends javax.swing.JFrame {
     }//GEN-LAST:event_filterComboBoxActionPerformed
 
     private void searchBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtn1ActionPerformed
-        // TODO add your handling code here:
+ 
         String searchItem = searchTxt.getText();
         ArrayList<EventVO> eventListNew = new ArrayList<EventVO>();
 
