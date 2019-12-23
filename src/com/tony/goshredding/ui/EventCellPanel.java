@@ -26,7 +26,13 @@ public class EventCellPanel extends javax.swing.JPanel {
      * Creates new form EventItemPanel
      */
     private EventVO eventObj;
-
+    public void setSelectedState(boolean bSelected){
+      if (bSelected) {
+            jPanel1.setBackground(new java.awt.Color(218, 227, 243));
+        } else {
+            jPanel1.setBackground(new java.awt.Color(239, 246, 254));
+        }
+    }
     public EventCellPanel(EventVO eventVO) {
         initComponents();
       
