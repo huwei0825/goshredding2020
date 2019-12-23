@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -62,8 +63,19 @@ public class MainFormUI extends javax.swing.JFrame {
         } else if (GoService.currentUserType == GoService.USER_TYPE_ORGANIZER) {
             try {
                 eventListOriginal = GoService.getInstance().getOtherEventByOrganizerId(GoService.currentUserId);
+                //get event member count to eventListOriginal.
+                HashMap eventIdAndMemberMap = GoService.getInstance().getEventIdAndMemberCount();
+                for (int i = 0; i < eventListOriginal.size(); i++) {
+                    EventVO event = eventListOriginal.get(i);
+                    if (eventIdAndMemberMap.containsKey(event.eventId)) {
+                        event.memberCount = (String) eventIdAndMemberMap.get(event.eventId);
+                    }else{
+                        event.memberCount="0";
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
+
             }
         }
         if (eventListOriginal.size() == 0) {
@@ -71,7 +83,9 @@ public class MainFormUI extends javax.swing.JFrame {
             event.eventName = "You have no events yet";
             eventListOriginal.add(event);
         }
+
         recommandEventList = eventListOriginal;
+        recommandEventList = GoService.bubbleSortEventByTime(recommandEventList);//first sort by time.
         initTableData();
 
         //double click events
@@ -378,7 +392,7 @@ public class MainFormUI extends javax.swing.JFrame {
 
     private void myProfileLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_myProfileLblMouseClicked
 
-        UserInformationUI suFrm = new UserInformationUI(null,true,UserInformationUI.USE_TYPE_MODIFY);
+        UserInformationUI suFrm = new UserInformationUI(null, true, UserInformationUI.USE_TYPE_MODIFY);
         suFrm.setVisible(true);
     }//GEN-LAST:event_myProfileLblMouseClicked
 
@@ -427,9 +441,11 @@ public class MainFormUI extends javax.swing.JFrame {
     private void sortComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_sortComboBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             if (sortComboBox.getSelectedIndex() == 0) {//sort by time.
-
-            } else if (sortComboBox.getSelectedIndex() == 0) {//sort by popularity.
-
+                recommandEventList = GoService.bubbleSortEventByTime(recommandEventList);
+                initTableData();
+            } else if (sortComboBox.getSelectedIndex() == 1) {//sort by popularity.
+                recommandEventList = GoService.bubbleSortEventByPopularity(recommandEventList);//first sort by Popularity.
+                initTableData();
             }
         }
     }//GEN-LAST:event_sortComboBoxItemStateChanged

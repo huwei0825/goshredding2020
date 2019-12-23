@@ -244,7 +244,7 @@ public class GoService extends SqliteHelper {
         return rsList;
     }
 
-    public ArrayList bubbleSortEventByTime(ArrayList<EventVO> eventList) {
+    public static ArrayList bubbleSortEventByTime(ArrayList<EventVO> eventList) {
 
         DateFormat df = new SimpleDateFormat("dd/MM/yyyyHH:mm");
         boolean found = false;
@@ -276,7 +276,35 @@ public class GoService extends SqliteHelper {
         } while (swap == true);
         return eventList;
     }
+    public static ArrayList bubbleSortEventByPopularity(ArrayList<EventVO> eventList) {
 
+        boolean found = false;
+        boolean swap;
+        EventVO temp;
+        int size = eventList.size();
+        do {
+            swap = false;
+            for (int i = 0; i < size - 1; i++) {
+                EventVO event1 = new EventVO();
+                EventVO event2 = new EventVO();
+                event1 = (EventVO) eventList.get(i);
+                event2 = (EventVO) eventList.get(i + 1);
+                try {
+                    if (Integer.parseInt(event1.memberCount)  > Integer.parseInt(event2.memberCount)) {
+                        temp = eventList.get(i);
+                        eventList.set(i, eventList.get(i + 1));
+                        eventList.set(i + 1, temp);
+                        swap = true;
+                    } else {
+                        System.out.println("no");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } while (swap == true);
+        return eventList;
+    }
     public void addAdvertisement(AdvertisementVO advertisementVO) throws Exception {
         String strNewId = getNextMaxID("advertisement_table", "AdvertisementID");
         Map<String, Object> map = new HashMap<String, Object>();
